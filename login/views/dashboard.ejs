@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Dashboard</title>
+  </head>
+  <body>
+    <h1>Dashboard</h1>
+
+    <% if (user && user.email) { %>
+      <p>Logged in as <strong><%= user.email %></strong></p>
+    <% } else { %>
+      <p>Logged in with Google.</p>
+    <% } %>
+
+    <form method="POST" action="/logout">
+      <button type="submit">Log Out</button>
+    </form>
+  </body>
+</html>
