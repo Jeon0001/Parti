@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import './Dashboard.css';
 import lebron from "./assets/lebron.jpg"; // relative to Dashboard.jsx
 
 
 export default function Dashboard() {
-  
+  const navigate = useNavigate();
   const [data, setData] = useState(null);
   const [error, setError] = useState("");
 
@@ -37,15 +38,18 @@ export default function Dashboard() {
 
     <div className="dashboard-page">
       {/* Top Navigation Bar */}
+      {/* Top Navigation Bar */}
       <nav className="dashboard-topbar">
         <div className="dashboard-logo">Parti</div>
         <div className="dashboard-buttons">
-          <button>Home</button>
-          <button>My Partis</button>
-          <button>Find Partis</button>
-          <button>Create Parti</button>
-          <button>Socials</button>
-          <button>Logout</button>
+          <button onClick={() => navigate("/dashboard")}>Home</button>
+          <button onClick={() => navigate("/mypartis")}>My Partis</button>
+          <button onClick={() => navigate("/findpartis")}>Find Partis</button>
+          <button onClick={() => navigate("/createparti")}>Create Parti</button>
+          <button onClick={() => navigate("/socials")}>Socials</button>
+          <div className="account-bar">
+            <button onClick={() => navigate("/login")}>Logout</button>
+          </div>
         </div>
       </nav>
 
@@ -93,7 +97,7 @@ export default function Dashboard() {
 
   <div className="game-card">
     <img src="../games/cs2.jpeg" className="game-image" alt="Counter-Strike 2" />
-    <p>CS2</p>
+    <p>Counter-Strike 2</p>
   </div>
 
   <div className="game-card">
