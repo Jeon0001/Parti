@@ -1,0 +1,338 @@
+.rooms-shell {
+  padding: 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.rooms-hero {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  align-items: flex-start;
+}
+
+.rooms-hero h1 {
+  margin: 4px 0;
+}
+
+.lead {
+  color: #6b7280;
+  margin: 4px 0 0;
+}
+
+.hero-meta {
+  display: flex;
+  gap: 12px;
+}
+
+.hero-meta strong {
+  font-size: 28px;
+}
+
+.rooms-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 16px;
+}
+
+.room-card {
+  background: #0f172a;
+  border: 1px solid #1f2937;
+  border-radius: 12px;
+  color: #e5e7eb;
+  display: flex;
+  flex-direction: column;
+  min-height: 220px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+}
+
+.card-body {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  height: 100%;
+}
+
+.card-tags {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.card-footer {
+  margin-top: auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.rooms-grid h2 {
+  margin: 0;
+}
+
+.room-topic {
+  color: #9ca3af;
+  margin: 0;
+}
+
+.room-description {
+  color: #cbd5e1;
+}
+
+.pill {
+  background: #1f2937;
+  color: #e5e7eb;
+  border-radius: 999px;
+  padding: 4px 10px;
+  font-size: 12px;
+  border: 1px solid #334155;
+}
+
+.pill.subtle {
+  background: #111827;
+  color: #9ca3af;
+}
+
+.ghost {
+  background: transparent;
+  color: #38bdf8;
+  border: 1px solid #38bdf8;
+  border-radius: 8px;
+  padding: 8px 12px;
+  cursor: pointer;
+}
+
+button {
+  background: linear-gradient(90deg, #38bdf8, #6366f1);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 14px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+button.danger {
+  background: #ef4444;
+}
+
+button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.room-form {
+  background: #0b1220;
+  border: 1px solid #1f2937;
+  border-radius: 12px;
+  padding: 20px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  align-items: start;
+}
+
+.room-form form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.room-form input,
+.room-form textarea,
+.audio-pickers select,
+.chat-input input,
+.room-detail textarea,
+.room-form button,
+.room-form .ghost {
+  width: 100%;
+}
+
+.room-form label {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-weight: 600;
+}
+
+.room-form input,
+.room-form textarea,
+.audio-pickers select,
+.chat-input input {
+  background: #111827;
+  border: 1px solid #1f2937;
+  border-radius: 8px;
+  padding: 10px 12px;
+  color: #e5e7eb;
+}
+
+.room-detail {
+  background: #0b1220;
+  border: 1px solid #1f2937;
+  border-radius: 12px;
+  padding: 20px;
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.detail-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.room-chat-shell {
+  padding: 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.chat-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
+.header-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.chat-header h1 {
+  margin: 4px 0;
+}
+
+.voice-controls,
+.audio-pickers,
+.chat-panel {
+  background: #0b1220;
+  border: 1px solid #1f2937;
+  border-radius: 12px;
+  padding: 16px;
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.voice-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.audio-pickers {
+  align-items: flex-end;
+}
+
+.audio-pickers > div {
+  flex: 1;
+}
+
+.status-line {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #e5e7eb;
+}
+
+.status-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.status-dot.online { background: #22c55e; }
+.status-dot.warning { background: #f59e0b; }
+.status-dot.offline { background: #ef4444; }
+
+.error {
+  color: #ef4444;
+  margin: 6px 0 0;
+}
+
+.chat-panel {
+  flex-direction: column;
+  gap: 12px;
+}
+
+.messages {
+  max-height: 460px;
+  overflow: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.message {
+  background: #0f172a;
+  border: 1px solid #1f2937;
+  border-radius: 10px;
+  padding: 12px;
+}
+
+.message-meta {
+  display: flex;
+  justify-content: space-between;
+  color: #9ca3af;
+  font-size: 12px;
+  margin-bottom: 6px;
+}
+
+.chat-input {
+  display: flex;
+  gap: 8px;
+}
+
+.chat-input button {
+  flex-shrink: 0;
+}
+
+.eyebrow {
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 12px;
+  color: #9ca3af;
+  margin: 0;
+}
+
+.helper {
+  color: #9ca3af;
+}
+
+.empty {
+  color: #9ca3af;
+}
+
+@media (max-width: 900px) {
+  .rooms-hero,
+  .room-form,
+  .room-detail,
+  .chat-header,
+  .voice-controls,
+  .audio-pickers {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .hero-meta {
+    width: 100%;
+  }
+
+  .detail-actions,
+  .voice-actions,
+  .header-actions,
+  .card-footer,
+  .audio-pickers {
+    width: 100%;
+  }
+}
