@@ -1,0 +1,46 @@
+/* Fullscreen background with overlay */
+.dashboard-container {
+    width: 100vw;
+    height: 100vh;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    font-family: "Arial", sans-serif;
+  }
+  
+  /* Semi-transparent overlay to make text readable */
+  .dashboard-overlay {
+    text-align: center;
+    background: rgba(0, 0, 0, 0.5); /* dark overlay */
+    padding: 50px 40px;
+    border-radius: 15px;
+    color: white;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.6);
+    max-width: 400px;
+  }
+  
+  /* Headline */
+  .dashboard-overlay h1 {
+    font-size: 2.5rem;
+    margin-bottom: 20px;
+    text-shadow: 2px 2px 6px rgba(0,0,0,0.8);
+  }
+  
+  /* Paragraphs */
+  .dashboard-overlay p {
+    font-size: 1.2rem;
+    margin-bottom: 10px;
+  }
+  
+  /* Error and loading styles */
+  .dashboard-error, .dashboard-loading {
+    font-size: 1.5rem;
+    color: red;
+    text-align: center;
+    margin-top: 50px;
+  }
+  

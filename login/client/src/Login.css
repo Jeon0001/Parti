@@ -1,0 +1,137 @@
+
+
+/* Full-page gradient background */
+body, html {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    background: linear-gradient(
+      to bottom,
+      #306844,
+      #1E453E,
+      #182C25
+    ) !important;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  }
+  
+  /* Login/Register Container */
+  .login-container {
+    max-width: 400px;
+    margin: 100px auto;
+    padding: 40px;
+    border-radius: 12px;
+  
+    /* NEW: Black with 0.8 opacity */
+    background: rgba(0, 0, 0, 0.8) !important;
+  
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.4);
+    text-align: center;
+    color: white; /* Text becomes visible on black */
+  }
+
+  .header-login {
+    font-family: "Silkscreen", sans-serif;
+    font-size: 36px;
+    font-weight: 700;
+    color: white;
+    letter-spacing: 2px;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+  
+  /* Heading */
+  .login-container h1 {
+    margin-bottom: 24px;
+    color: #ffffff;
+  }
+  
+  /* Form layout */
+  .login-form {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .login-form input {
+    margin: 12px 0;
+    padding: 12px;
+  
+    color: white;
+    font-size: 16px;
+  
+    border: 0;
+    border-radius: 10px; /* Perfect rounded corners */
+  
+    /* Create space for the “border” */
+    padding: 12px 14px;
+    
+    /* Background consists of 2 layers:
+       1st layer = input background (dark)
+       2nd layer = gradient border */
+    background:
+      linear-gradient(#222, #222) padding-box,
+      linear-gradient(135deg, #306844,
+      #1E453E,
+      #182C25) border-box;
+  
+    /* Creates the actual border using background-clip trick */
+    background-clip: padding-box, border-box;
+  
+    /* Border thickness */
+    border: 3px solid transparent;
+  }
+  
+  /* Placeholder color */
+  .login-form input::placeholder {
+    color: #aaaaaa;
+  }
+  
+  
+  /* Placeholder color */
+  .login-form input::placeholder {
+    color: #aaaaaa;
+  }
+  
+  
+  /* Submit button */
+  .login-form button {
+    padding: 15px 12px;
+    margin-top: 12px;
+    border: none;
+    border-radius: 10px;
+    background: #182C25;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background 0.25s ease;
+  }
+  
+  .login-form button:hover {
+    background: #20362c;
+  }
+  
+  /* Google login button */
+  .google-btn {
+    padding: 12px;
+    margin-top: 12px;
+    border: none;
+    border-radius: 10px;
+    background: #182C25;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background 0.25s ease;
+  }
+  
+  .google-btn:hover {
+    background: #20362c;
+  }
+  
+  /* Error & Success messages */
+  .error-msg {
+    color: #ff6b6b;
+  }
+  
+  .success-msg {
+    color: #51cf66;
+  }
+  
