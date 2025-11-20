@@ -1,8 +1,9 @@
-
-
-/* Full-page gradient background */
-body, html {
+html{
     height: 100%;
+}
+
+body {
+    min-height: 100%;
     margin: 0;
     padding: 0;
     background: linear-gradient(
@@ -10,9 +11,13 @@ body, html {
       #306844,
       #1E453E,
       #182C25
-    ) !important;
+    );
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-attachment: scroll; /* gradient scrolls with content */
+    background-repeat: no-repeat;
+    background-size: cover; /* cover the entire area */
   }
+  
   
   /* Login/Register Container */
   .login-container {
@@ -20,8 +25,7 @@ body, html {
     margin: 100px auto;
     padding: 40px;
     border-radius: 12px;
-  
-    /* NEW: Black with 0.8 opacity */
+
     background: rgba(0, 0, 0, 0.8) !important;
   
     box-shadow: 0 6px 15px rgba(0, 0, 0, 0.4);

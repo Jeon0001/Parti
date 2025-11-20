@@ -1,46 +1,183 @@
-/* Fullscreen background with overlay */
-.dashboard-container {
-    width: 100vw;
-    height: 100vh;
-    background-size: cover;
-    background-position: center;
+/* Full-page gradient background */
+html, body {
+    min-height: 100%;
+    margin: 0;
+    padding: 0;
+    background: linear-gradient(
+      to bottom,
+      #306844,
+      #1E453E,
+      #182C25
+    );
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-attachment: scroll; /* gradient scrolls with content */
     background-repeat: no-repeat;
+    background-size: cover; /* cover the entire area */
+  }
+  
+  
+  /* Top navigation bar */
+  .dashboard-topbar {
     display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 24px 10px;
+    background: #182C25;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.5);
+  }
+  
+  /* Logo / title */
+  .dashboard-logo {
+    font-size: 24px;
+    font-family: "Silkscreen";
+    font-weight: 700;
+    color: white;
+    letter-spacing: 1px;
+  }
+  
+  /* Buttons container */
+  .dashboard-buttons {
+    display: flex;
+    gap: 12px;
+  }
+  
+  /* Topbar buttons */
+  .dashboard-buttons button {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 8px;
+    background: transparent;
+    color: white;
+    cursor: pointer;
+    font-size: 16px;
+  }
+  
+  .dashboard-buttons button:hover {
+    background: #20362c;
+  }
+  
+  /* Main content */
+  .dashboard-content {
+    margin-top: 80px; /* to avoid topbar overlap */
+    text-align: center;
+    padding: 20px;
+  }
+  
+  .dashboard-content h1 {
+    font-size: 36px;
+    margin-bottom: 12px;
+  }
+  
+  .dashboard-content p {
+    font-size: 18px;
+    margin-bottom: 6px;
+  }
+  
+  /* Full-page background */
+.welcome-page {
+    /* height: 100vh; */
+    width: 100%;
+    display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
-    position: relative;
-    font-family: "Arial", sans-serif;
-  }
-  
-  /* Semi-transparent overlay to make text readable */
-  .dashboard-overlay {
-    text-align: center;
-    background: rgba(0, 0, 0, 0.5); /* dark overlay */
-    padding: 50px 40px;
-    border-radius: 15px;
     color: white;
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.6);
-    max-width: 400px;
-  }
-  
-  /* Headline */
-  .dashboard-overlay h1 {
-    font-size: 2.5rem;
-    margin-bottom: 20px;
-    text-shadow: 2px 2px 6px rgba(0,0,0,0.8);
-  }
-  
-  /* Paragraphs */
-  .dashboard-overlay p {
-    font-size: 1.2rem;
-    margin-bottom: 10px;
-  }
-  
-  /* Error and loading styles */
-  .dashboard-error, .dashboard-loading {
-    font-size: 1.5rem;
-    color: red;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     text-align: center;
-    margin-top: 50px;
+  }
+  
+  /* Main title */
+  .welcome-title {
+    font-size: 48px;
+    font-weight: 700;
+    margin-bottom: 12px;
+    margin-top: 150px;
+  }
+  
+  /* Subtitle */
+  .welcome-subtitle {
+    font-size: 20px;
+    margin-bottom: 40px;
+    color: #c1e1c1;
+  }
+  
+  /* Buttons container */
+  .welcome-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    justify-content: center;
+  }
+
+  /* Games Related Stuffs */
+  .games-title {
+    font-size: 32px;
+    font-weight: 600;
+    margin-bottom: 20px;
+    margin-top: 20px;
+  }
+  
+  /* Grid layout */
+  .games-grid {
+    display: flex; /* might change this to flex once the game card is standardized */
+    flex-wrap: wrap;            /* Allows automatic wrapping */
+    justify-content: center;
+    grid-template-columns: repeat(8, 180px);
+    gap: 20px;
+  }
+  
+  .game-card {
+    background: rgba(0,0,0,0.4);
+    border-radius: 12px;
+    padding: 12px;
+    cursor: pointer;
+    transition: transform 0.25s ease, background 0.25s ease;
+  }
+    
+  .game-card:hover {
+    transform: scale(1.08);
+    background: rgba(0,0,0,0.6);
+  }
+  
+  .game-card img {
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 10px;
+  }
+  
+  .game-card p {
+    margin-top: 8px;
+    font-size: 16px;
+    font-weight: 500;
+  }
+
+  .game-image {
+    width: 150px;
+    height: 150px;
+    border-radius: 12px;
+    object-fit: cover;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    cursor: pointer;
+    transition: transform 0.2s ease;
+  }
+
+  .see-more-btn {
+    display: inline-block;
+    margin: 30px auto 50px auto;
+    padding: 12px 24px;
+    background-color: transparent;
+    color: white;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+  
+  .see-more-btn:hover {
+    background-color: #20362c;
+    transform: scale(1.05);
   }
   
