@@ -35,6 +35,24 @@
     font-size: 1.2rem;
     margin-bottom: 10px;
   }
+
+  .agora-link {
+    display: inline-block;
+    margin-top: 16px;
+    padding: 12px 16px;
+    background: linear-gradient(135deg, #0ea5e9, #2563eb);
+    color: #fff;
+    font-weight: 700;
+    text-decoration: none;
+    border-radius: 10px;
+    box-shadow: 0 12px 26px rgba(37, 99, 235, 0.35);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+  }
+
+  .agora-link:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 16px 32px rgba(14, 165, 233, 0.35);
+  }
   
   /* Error and loading styles */
   .dashboard-error, .dashboard-loading {

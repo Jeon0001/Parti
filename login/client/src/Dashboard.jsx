@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import './Dashboard.css';
 import lebron from "./assets/lebron.jpg"; // relative to Dashboard.jsx
 
@@ -29,6 +30,9 @@ export default function Dashboard() {
       <div className="dashboard-overlay">
         <h1>Welcome, {data.username}!</h1>
         <p>Enjoy the game!</p>
+        <Link className="agora-link" to="/agora-rooms">
+          Open Agora rooms
+        </Link>
       </div>
     </div>
   );

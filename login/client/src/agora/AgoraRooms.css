@@ -1,0 +1,223 @@
+.agora-page {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 32px 20px 48px;
+  color: #0f172a;
+}
+
+.agora-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.agora-title {
+  font-size: 28px;
+  font-weight: 700;
+  color: #0b63f6;
+}
+
+.agora-credentials, .agora-panels {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  padding: 16px;
+  box-shadow: 0 6px 18px rgba(15, 23, 42, 0.06);
+}
+
+.agora-panels {
+  display: grid;
+  grid-template-columns: 1fr 1.2fr;
+  gap: 16px;
+  margin-top: 16px;
+}
+
+.agora-section h3 {
+  margin: 0 0 12px 0;
+  font-size: 18px;
+  color: #111827;
+}
+
+.agora-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 12px;
+}
+
+.agora-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.agora-field label {
+  font-weight: 600;
+  color: #1f2937;
+  font-size: 14px;
+}
+
+.agora-input, .agora-select, .agora-textarea {
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  padding: 10px 12px;
+  font-size: 14px;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.agora-input:focus, .agora-select:focus, .agora-textarea:focus {
+  border-color: #0b63f6;
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(11, 99, 246, 0.15);
+}
+
+.agora-button {
+  background: linear-gradient(135deg, #0ea5e9, #2563eb);
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  padding: 10px 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  justify-content: center;
+}
+
+.agora-button.secondary {
+  background: #0f172a;
+}
+
+.agora-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.agora-button:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 10px 22px rgba(37, 99, 235, 0.25);
+}
+
+.agora-room-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.agora-room-card {
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  padding: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.agora-room-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.agora-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  border-radius: 8px;
+  background: #ecfeff;
+  color: #0f172a;
+  border: 1px solid #a5f3fc;
+  font-weight: 600;
+}
+
+.agora-badge {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 8px 10px;
+  font-size: 13px;
+}
+
+.agora-logs, .agora-chat {
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 12px;
+  background: #f8fafc;
+  height: 320px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.agora-logs-list, .agora-chat-messages {
+  flex: 1;
+  overflow-y: auto;
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.agora-message {
+  background: #eef2ff;
+  border-radius: 10px;
+  padding: 8px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.agora-message strong {
+  color: #1d4ed8;
+}
+
+.agora-footer-form {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 10px;
+  align-items: center;
+}
+
+.agora-alert {
+  margin-top: 10px;
+  padding: 12px;
+  border-radius: 10px;
+  border: 1px solid #fcd34d;
+  background: #fffbeb;
+  color: #92400e;
+}
+
+.agora-devices {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 12px;
+}
+
+.agora-chip-list {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.agora-chip {
+  background: #dbeafe;
+  padding: 6px 10px;
+  border-radius: 8px;
+  font-size: 13px;
+  color: #1e3a8a;
+}
+
+@media (max-width: 900px) {
+  .agora-panels {
+    grid-template-columns: 1fr;
+  }
+}
