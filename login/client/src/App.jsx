@@ -7,6 +7,8 @@ import CreateParti from "./create/CreateParti";
 import SelectLanguage from "./create/SelectLanguage"
 import SelectTags from "./create/SelectTags"
 import SelectTime from "./create/SelectTime"
+import Finalize from "./create/Finalize"
+import Chat from "./chat/Chat"
 
 
 export default function App() {
@@ -21,6 +23,8 @@ export default function App() {
         <Route path="/selectlanguage" element={<SelectLanguage />} />
         <Route path="/selecttags" element={<SelectTags />} />
         <Route path="/selecttime" element={<SelectTime />} />
+        <Route path="/finalize" element={<Finalize />} />
+        <Route path="/chat" element={<Chat />} />
       </Routes>
     </BrowserRouter>
   );
