@@ -47,6 +47,7 @@ export default function Dashboard() {
           <button onClick={() => navigate("/findpartis")}>Find Partis</button>
           <button onClick={() => navigate("/createparti")}>Create Parti</button>
           <button onClick={() => navigate("/socials")}>Socials</button>
+          <button onClick={() => navigate("/chat")}>Chat</button>
           <div className="account-bar">
             <button onClick={() => navigate("/login")}>Logout</button>
           </div>
