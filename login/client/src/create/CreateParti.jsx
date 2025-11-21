@@ -4,11 +4,11 @@ import "./CreateParti.css";
 
 // Goated games frrrr
 const popularGames = [
-    { name: "Counter-Strike 2", image: "../games/cs2.jpeg" },
-    { name: "League of Legends", image: "../games/lol.jpg" },
-    { name: "Valorant", image: "../games/valorant.avif" },
+    { name: "Counter-Strike 2", image: "../games/cs2.jpeg", wallpaper: "../wallpapers/cs2.mp4" },
+    { name: "League of Legends", image: "../games/lol.jpg", wallpaper: "../wallpapers/lol.mp4"},
+    { name: "Valorant", image: "../games/valorant.avif",  wallpaper: "../wallpapers/valorant.mp4" },
     { name: "EA FC26", image: "../games/fifa.jpg" },
-    { name: "Minecraft", image: "../games/minecraft.avif" },
+    { name: "Minecraft", image: "../games/minecraft.avif", wallpaper: "../wallpapers/minecraft.mp4" },
     { name: "R6 Siege", image: "../games/r6.jpg" },
     { name: "Fortnite", image: "../games/fortnite.jpg" },
     { name: "Apex Legends", image: "../games/apex.avif" },
@@ -16,7 +16,7 @@ const popularGames = [
     { name: "Rocket League", image: "../games/rl.jpeg" },
     { name: "Call of Duty", image: "../games/cod.avif" },
     { name: "Overwatch 2", image: "../games/overwatch.jpg" },
-    { name: "PUBG", image: "../games/pubg.webp" },
+    { name: "PUBG", image: "../games/pubg.webp", wallpaper: "../wallpapers/pubg.mp4" },
     { name: "Genshin Impact", image: "../games/genshin.avif" },
     { name: "Roblox", image: "../games/roblox.jpg" },
     { name: "Escape from Tarkov", image: "../games/tarkov.jpg" },
@@ -32,20 +32,16 @@ const popularGames = [
 
 export default function CreateParti() {
   const [searchQuery, setSearchQuery] = useState("");
-
-  /* For game selection bruuuuh */
   const [selectedGame, setSelectedGame] = useState(null);
+
   const handleSelect = (game) => {
     setSelectedGame(prev => prev?.name === game.name ? null : game);
   };
 
   const navigate = useNavigate();
-
   const handleNext = () => {
     if (!selectedGame) return;
-    navigate("/selectlanguage", {
-      state: { selectedGame }
-    });
+    navigate("/selectlanguage", { state: { selectedGame } });
   };
 
   const filteredGames = popularGames.filter(game =>
@@ -54,6 +50,23 @@ export default function CreateParti() {
 
   return (
     <div className="create-page">
+
+      {/* Video background (only if wallpaper exists) */}
+      {selectedGame?.wallpaper && (
+    <>
+      <video
+        className="wallpaper-video"
+        autoPlay
+        loop
+        muted
+        src={selectedGame.wallpaper}
+        type="video/mp4"
+      />
+      {/* Dim overlay */}
+      <div className="video-overlay"></div>
+    </>
+  )}
+
       {/* Top Navigation Bar */}
       <nav className="dashboard-topbar">
         <div className="dashboard-logo">Parti</div>
@@ -93,15 +106,12 @@ export default function CreateParti() {
             </div>
           ))}
         </div>
-
-        
       </div>
+
       <div className="back-next-container">
-          <button className="back-btn" onClick={() => navigate(-1)}>Back</button>
-          <button className="next-btn" disabled={!selectedGame} onClick={handleNext}>Next</button>
-        </div>
-      
+        <button className="back-btn" onClick={() => navigate(-1)}>Back</button>
+        <button className="next-btn" disabled={!selectedGame} onClick={handleNext}>Next</button>
+      </div>
     </div>
-    
   );
 }
