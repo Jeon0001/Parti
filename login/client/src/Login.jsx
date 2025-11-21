@@ -36,6 +36,7 @@ export default function Login() {
   };
 
   return (
+    <div className="login-page">
     <div className="login-container">
       <h1 className="header-login">Parti</h1>
       <form onSubmit={handleLogin} className="login-form">
@@ -64,6 +65,7 @@ export default function Login() {
       <p>
         Don't have an account? <a href="/register">Sign Up</a>
       </p>
+    </div>
     </div>
   );
 }

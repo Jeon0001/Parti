@@ -64,7 +64,7 @@ app.post("/api/login", (req, res) => {
   const { username, email, password } = req.body;
 
   const user = users.find(u => u.email === email && u.password === password);
-  if (!user) return res.json({ success: false, message: "Invalid email or password" });
+  if (!user) return res.json({ success: false, message: "Incorrect email or password" });
 
   req.session.user = { username: user.username, email: user.email };
   res.json({ success: true });

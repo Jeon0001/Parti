@@ -4,6 +4,9 @@ import Login from "./Login";
 import Register from "./Register";
 import Dashboard from "./Dashboard";
 import CreateParti from "./create/CreateParti";
+import SelectLanguage from "./create/SelectLanguage"
+import SelectTags from "./create/SelectTags"
+import SelectTime from "./create/SelectTime"
 
 
 export default function App() {
@@ -15,6 +18,9 @@ export default function App() {
         <Route path="/register" element={<Register />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/createparti" element={<CreateParti />} />
+        <Route path="/selectlanguage" element={<SelectLanguage />} />
+        <Route path="/selecttags" element={<SelectTags />} />
+        <Route path="/selecttime" element={<SelectTime />} />
       </Routes>
     </BrowserRouter>
   );

@@ -1,20 +1,38 @@
 /* Register.css */
+.register-page {
+  min-height: 100vh;
+background: linear-gradient(to bottom, #306844, #1E453E, #182C25);
+color: white;
+font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+display: flex;
+flex-direction: column;
+align-items: center;
+}
 
 .register-container {
-    max-width: 400px;
-    margin: 60px auto;
-    padding: 40px 30px;
-    background-color: #ffffff;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-    border-radius: 12px;
-    text-align: center;
-    font-family: "Arial", sans-serif;
-  }
+  max-width: 300px;
+  width: 100%;
+  margin: 160px auto;
+  padding: 40px 80px;
+  border-radius: 12px;
+
+  background: rgba(0, 0, 0, 0.8) !important;
+
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.4);
+  text-align: center;
+  color: white; /* Text becomes visible on black */
+}
+
+
   
   .register-container h1 {
-    margin-bottom: 25px;
-    font-size: 2rem;
-    color: #333;
+    font-family: "Silkscreen", sans-serif;
+    font-size: 36px;
+    font-weight: 700;
+    color: white;
+    letter-spacing: 2px;
+    margin-bottom: 20px;
+    text-align: center;
   }
   
   .register-form {

@@ -1,0 +1,151 @@
+.time-page {
+    min-height: 100vh;
+    background: linear-gradient(to bottom, #306844, #1E453E, #182C25);
+    color: white;
+    padding-top: 160px;
+    display: flex;
+    flex-direction: column;
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  }
+  
+  /* Use same topbar style as other pages */
+  .dashboard-topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 24px 10px;
+    background: #182C25;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.5);
+  }
+  
+  .dashboard-logo {
+    font-size: 24px;
+    font-family: "Silkscreen";
+    color: white;
+  }
+  
+  .dashboard-buttons {
+    display: flex;
+    gap: 12px;
+  }
+  
+  .dashboard-buttons button {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 8px;
+    background: transparent;
+    color: white;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background 0.25s ease;
+  }
+  
+  .dashboard-buttons button:hover {
+    background: #20362c;
+  }
+  
+  .account-bar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  
+  /* Main content */
+  .time-content {
+    text-align: center;
+    margin-bottom: 60px;
+  }
+  
+  .create-title {
+    font-size: 48px;
+    font-weight: 700;
+    margin-bottom: 50px;
+  }
+  
+  .selected-game-label,
+  .selected-lang-label {
+    font-size: 22px;
+    margin-bottom: 10px;
+  }
+  
+  .selected-game-label span,
+  .selected-lang-label span {
+    color: #7cf5a6;
+    font-weight: bold;
+  }
+  
+  /* Time grid */
+  .time-grid {
+    max-width: 900px;
+    margin: 40px auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 20px;
+  }
+  
+  .time-card {
+    background: #1d2a24;
+    padding: 20px;
+    border-radius: 12px;
+    font-size: 20px;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: 0.2s ease;
+  }
+  
+  .time-card:hover {
+    background: #23352d;
+  }
+  
+  .time-card.selected {
+    border: 2px solid #49a37b;
+    background: #2a4a3f;
+  }
+  
+  /* Back + Next Buttons */
+  .back-next-container {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    margin-bottom: 40px;
+    margin-top: auto;
+  }
+  
+  .back-btn,
+  .next-btn {
+    padding: 12px 20px;
+    font-size: 16px;
+    border-radius: 8px;
+    border: none;
+  }
+  
+  .back-btn {
+    margin-left: 40px;
+    background: rgba(0,0,0,0.4);
+    color: white;
+  }
+  
+  .back-btn:hover {
+    background: rgba(0,0,0,0.6);
+  }
+  
+  .next-btn {
+    margin-right: 40px;
+    background: #4CAF50;
+    color: white;
+  }
+  
+  .next-btn:hover:not(:disabled) {
+    background: #3d8d41;
+  }
+  
+  .next-btn:disabled {
+    background: #2f2f2f;
+    opacity: 0.5;
+    cursor: default;
+  }
+  

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import "./CreateParti.css";
 import { useNavigate } from "react-router-dom";
+import "./CreateParti.css";
 
 // Goated games frrrr
 const popularGames = [
@@ -28,12 +28,25 @@ const popularGames = [
     { name: "Palworld", image: "../games/palworld.jpg" },
     { name: "Monster Hunter", image: "../games/mhw.jpg" },
     { name: "NBA 2K25", image: "../games/nba.avif" }
-  ];
-  
+];
 
 export default function CreateParti() {
   const [searchQuery, setSearchQuery] = useState("");
+
+  /* For game selection bruuuuh */
+  const [selectedGame, setSelectedGame] = useState(null);
+  const handleSelect = (game) => {
+    setSelectedGame(prev => prev?.name === game.name ? null : game);
+  };
+
   const navigate = useNavigate();
+
+  const handleNext = () => {
+    if (!selectedGame) return;
+    navigate("/selectlanguage", {
+      state: { selectedGame }
+    });
+  };
 
   const filteredGames = popularGames.filter(game =>
     game.name.toLowerCase().includes(searchQuery.toLowerCase())
@@ -70,19 +83,25 @@ export default function CreateParti() {
 
         <div className="games-grid">
           {filteredGames.map((game, index) => (
-            <div key={index} className="game-card">
+            <div
+              key={index}
+              className={`game-card ${selectedGame?.name === game.name ? "selected" : ""}`}
+              onClick={() => handleSelect(game)}
+            >
               <img src={game.image} alt={game.name} className="game-image" />
               <p>{game.name}</p>
             </div>
           ))}
-          
         </div>
 
-        <div className="back-btn-container">
-    <button className="back-btn" onClick={() => navigate(-1)}>Back</button>
-  </div>
         
       </div>
+      <div className="back-next-container">
+          <button className="back-btn" onClick={() => navigate(-1)}>Back</button>
+          <button className="next-btn" disabled={!selectedGame} onClick={handleNext}>Next</button>
+        </div>
+      
     </div>
+    
   );
 }
