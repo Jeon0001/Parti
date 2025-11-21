@@ -81,7 +81,7 @@ export default function SelectTags() {
           <button onClick={() => navigate("/find-partis")}>Find Partis</button>
           <button onClick={() => navigate("/create")}>Create Parti</button>
           <div className="account-bar">
-            <button onClick={() => navigate("/account")}>Logout</button>
+            <button onClick={() => navigate("/login")}>Logout</button>
           </div>
         </div>
       </nav>

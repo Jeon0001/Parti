@@ -1,11 +1,11 @@
 .time-page {
     min-height: 100vh;
-    background: linear-gradient(to bottom, #306844, #1E453E, #182C25);
-    color: white;
-    padding-top: 160px;
-    display: flex;
-    flex-direction: column;
-    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(to bottom, #306844, #1E453E, #182C25);
+  color: white;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   }
   
   /* Use same topbar style as other pages */
@@ -78,33 +78,53 @@
     font-weight: bold;
   }
   
-  /* Time grid */
-  .time-grid {
-    max-width: 900px;
-    margin: 40px auto;
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap: 20px;
+  /* Time input container */
+/* Time input container */
+.time-input-container {
+    display: flex;
+    justify-content: center;
+    gap: 60px; /* more space between From and To inputs */
+    margin-top: 50px;
+    flex-wrap: wrap;
   }
   
-  .time-card {
-    background: #1d2a24;
-    padding: 20px;
-    border-radius: 12px;
-    font-size: 20px;
+  /* Each individual input block */
+  .time-input-block {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  /* Label above input */
+  .time-input-block label {
+    font-size: 18px; /* bigger label text */
+    margin-bottom: 12px;
+    color: #ffffff;
+    font-weight: 600;
+  }
+  
+  /* Input itself */
+  .time-input-block input {
+    padding: 16px 18px; /* more padding */
+    border-radius: 14px; /* rounder corners */
+    border: 3px solid transparent;
+    background: linear-gradient(#222, #222) padding-box,
+                linear-gradient(135deg, #306844, #1E453E, #182C25) border-box;
+    background-clip: padding-box, border-box;
+    color: white;
+    font-size: 20px; /* bigger text */
+    width: 180px; /* wider input */
+    text-align: center;
     cursor: pointer;
-    border: 2px solid transparent;
-    transition: 0.2s ease;
+    transition: background 0.25s ease;
   }
   
-  .time-card:hover {
-    background: #23352d;
+  .time-input-block input:hover {
+    background: linear-gradient(#333, #333) padding-box,
+                linear-gradient(135deg, #306844, #1E453E, #182C25) border-box;
   }
   
-  .time-card.selected {
-    border: 2px solid #49a37b;
-    background: #2a4a3f;
-  }
+  
   
   /* Back + Next Buttons */
   .back-next-container {
