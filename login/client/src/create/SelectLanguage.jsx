@@ -1,40 +1,12 @@
 import React, { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import "./SelectLanguage.css";
+import { languageOptions } from "../data/options";
 
 export default function SelectLanguage() {
     const [searchTerm, setSearchTerm] = useState("");
     const [selectedLanguages, setSelectedLanguages] = useState([]);
-    const languages = [
-        { english: "Arabic", native: "العربية" },
-        { english: "Bengali", native: "বাংলা" },
-        { english: "Chinese", native: "中文" },
-        { english: "Dutch", native: "Nederlands" },
-        { english: "English", native: "English" },
-        { english: "Finnish", native: "Suomi" },
-        { english: "French", native: "Français" },
-        { english: "German", native: "Deutsch" },
-        { english: "Greek", native: "Ελληνικά" },
-        { english: "Hebrew", native: "עברית" },
-        { english: "Hindi", native: "हिन्दी" },
-        { english: "Indonesian", native: "Bahasa Indonesia" },
-        { english: "Italian", native: "Italiano" },
-        { english: "Japanese", native: "日本語" },
-        { english: "Korean", native: "한국어" },
-        { english: "Malay", native: "Bahasa Melayu" },
-        { english: "Polish", native: "Polski" },
-        { english: "Portuguese", native: "Português" },
-        { english: "Russian", native: "Русский" },
-        { english: "Spanish", native: "Español" },
-        { english: "Swedish", native: "Svenska" },
-        { english: "Tagalog", native: "Tagalog" },
-        { english: "Tamil", native: "தமிழ்" },
-        { english: "Thai", native: "ไทย" },
-        { english: "Turkish", native: "Türkçe" },
-        { english: "Ukrainian", native: "Українська" },
-        { english: "Urdu", native: "اردو" },
-        { english: "Vietnamese", native: "Tiếng Việt" },
-      ];
+    const languages = languageOptions;
       
       const filteredLanguages = languages.filter(lang =>
         lang.english.toLowerCase().includes(searchTerm.toLowerCase()) ||
