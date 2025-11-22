@@ -87,6 +87,9 @@ export default function Dashboard() {
   const [skillLevel, setSkillLevel] = useState("Select your skill");
   const [timeFrame, setTimeFrame] = useState("Select your time");
   const [activePartiTab, setActivePartiTab] = useState(partiTabs[0].id);
+  const [showGameModal, setShowGameModal] = useState(false);
+  const [showLanguageModal, setShowLanguageModal] = useState(false);
+  const modalActive = showGameModal || showLanguageModal;
 
   useEffect(() => {
     fetch("http://localhost:3000/api/dashboard", { credentials: "include" })
@@ -109,7 +112,7 @@ export default function Dashboard() {
   if (!data) return <p>Loading...</p>;
 
   return (
-    <div className="dashboard-page">
+    <div className={`dashboard-page ${modalActive ? "modal-active" : ""}`}>
       <nav className="dashboard-topbar">
         <div className="dashboard-logo">Parti</div>
         <div className="dashboard-buttons">
@@ -129,7 +132,7 @@ export default function Dashboard() {
         </div>
       </nav>
 
-      <main className="dashboard-content">
+      <main className={`dashboard-content ${modalActive ? "dashboard-blur" : ""}`}>
         <section className="hero-section">
           <div className="hero-copy">
             <p className="hero-tagline">Gaming shouldn't be lonely.</p>
@@ -167,29 +170,18 @@ export default function Dashboard() {
               <h3>Jump back into your favorite games faster.</h3>
             </div>
             <div className="lookup-grid">
-              <label>
+              <div className="lookup-field" onClick={() => setShowGameModal(true)}>
                 <span>Game</span>
-                <select
-                  value={selectedGame}
-                  onChange={(e) => setSelectedGame(e.target.value)}
-                >
-                  {quickLookupGames.map((game) => (
-                    <option key={game} value={game}>
-                      {game}
-                    </option>
-                  ))}
-                </select>
-              </label>
-              <label>
+                <div className="lookup-pill">
+                  {selectedGame || "Select a game"}
+                </div>
+              </div>
+              <div className="lookup-field" onClick={() => setShowLanguageModal(true)}>
                 <span>Language</span>
-                <select value={language} onChange={(e) => setLanguage(e.target.value)}>
-                  {languageOptions.map((lang) => (
-                    <option key={lang.english} value={lang.english}>
-                      {lang.english}
-                    </option>
-                  ))}
-                </select>
-              </label>
+                <div className="lookup-pill">
+                  {language || "Select language"}
+                </div>
+              </div>
               <label>
                 <span>Skill</span>
                 <select
@@ -355,6 +347,56 @@ export default function Dashboard() {
           </div>
         </footer>
       </main>
+      {showGameModal && (
+        <div className="modal-overlay" onClick={() => setShowGameModal(false)}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+            <div className="modal-header">
+              <h3>Select a Game</h3>
+              <button className="ghost-btn" onClick={() => setShowGameModal(false)}>Close</button>
+            </div>
+            <div className="modal-grid">
+              {popularGames.map((game) => (
+                <div
+                  key={game.name}
+                  className="modal-card"
+                  onClick={() => {
+                    setSelectedGame(game.name);
+                    setShowGameModal(false);
+                  }}
+                >
+                  <img src={game.image} alt={game.name} />
+                  <p>{game.name}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
+      {showLanguageModal && (
+        <div className="modal-overlay" onClick={() => setShowLanguageModal(false)}>
+          <div className="modal-content language-modal" onClick={(e) => e.stopPropagation()}>
+            <div className="modal-header">
+              <h3>Select a Language</h3>
+              <button className="ghost-btn" onClick={() => setShowLanguageModal(false)}>Close</button>
+            </div>
+            <div className="modal-lang-list">
+              {languageOptions.map((lang) => (
+                <button
+                  key={lang.english}
+                  className="lang-pill"
+                  onClick={() => {
+                    setLanguage(lang.english);
+                    setShowLanguageModal(false);
+                  }}
+                >
+                  <span>{lang.english}</span>
+                  <span className="native">{lang.native}</span>
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

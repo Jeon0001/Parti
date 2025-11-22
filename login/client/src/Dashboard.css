@@ -17,6 +17,15 @@ body {
   background: linear-gradient(180deg, #0c231d 0%, #0f3027 45%, #14281f 100%);
 }
 
+.dashboard-page.modal-active {
+  overflow: hidden;
+}
+
+.dashboard-content.dashboard-blur {
+  filter: blur(6px);
+  pointer-events: none;
+}
+
 .dashboard-topbar {
   position: fixed;
   top: 0;
@@ -214,7 +223,8 @@ body {
   gap: 16px;
 }
 
-.lookup-grid label {
+.lookup-grid label,
+.lookup-field {
   display: flex;
   flex-direction: column;
   font-size: 14px;
@@ -222,38 +232,30 @@ body {
   gap: 8px;
 }
 
-.lookup-grid select {
-  border-radius: 18px;
-  border: 1px solid #dfe8e2;
-  padding: 14px 16px;
-  font-size: 15px;
-  background: linear-gradient(135deg, #fdfdfd, #f0f5f2);
-  box-shadow: inset 0 1px 3px rgba(15, 27, 21, 0.08);
-  transition: border 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
-  appearance: none;
-  position: relative;
+.lookup-field {
+  cursor: pointer;
 }
 
-.lookup-grid label {
-  position: relative;
+.lookup-pill {
+  border-radius: 16px;
+  padding: 14px;
+  background: linear-gradient(135deg, #1f392b, #15241c);
+  border: 1px solid #314c3c;
+  color: #f0f7f3;
+  font-weight: 600;
+  transition: transform 0.2s ease, border 0.2s ease;
 }
 
-.lookup-grid label::after {
-  content: "⌄";
-  position: absolute;
-  right: 18px;
-  top: 50%;
-  transform: translateY(-10px);
-  color: #5d6c61;
-  pointer-events: none;
-  font-size: 18px;
-}
-
-.lookup-grid select:focus {
-  outline: none;
-  border-color: #2b6c4c;
-  box-shadow: 0 6px 16px rgba(43, 108, 76, 0.25);
+.lookup-field:hover .lookup-pill {
+  border-color: #59a57d;
   transform: translateY(-2px);
+}
+
+.lookup-grid select {
+  border-radius: 12px;
+  border: 1px solid #dfe8e2;
+  padding: 12px;
+  font-size: 15px;
 }
 
 .lookup-submit {
@@ -262,6 +264,104 @@ body {
   padding: 16px 24px;
   font-size: 16px;
   margin-top: 4px;
+}
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(7, 17, 13, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+  padding: 24px;
+}
+
+.modal-content {
+  background: rgba(19, 34, 26, 0.85);
+  backdrop-filter: blur(1);
+  color: #fff;
+  border-radius: 32px;
+  width: min(1100px, 90vw);
+  max-height: 90vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 32px;
+  box-shadow: 0 30px 70px rgba(0, 0, 0, 0.5);
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.modal-grid {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  grid-auto-rows: minmax(160px, auto);
+  gap: 16px;
+  overflow-y: auto;
+  padding-right: 8px;
+}
+
+.modal-card {
+  background: rgba(31, 55, 43, 0.75);
+  border-radius: 20px;
+  padding: 16px;
+  cursor: pointer;
+  border: 2px solid transparent;
+  transition: transform 0.2s ease, border 0.2s ease;
+  text-align: center;
+}
+
+.modal-card img {
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 14px;
+  margin-bottom: 10px;
+}
+
+.modal-card:hover {
+  transform: translateY(-4px);
+  border-color: #4ad197;
+}
+
+.language-modal {
+  width: min(800px, 90vw);
+}
+
+.modal-lang-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 12px;
+  overflow-y: auto;
+  padding-right: 8px;
+}
+
+.lang-pill {
+  padding: 12px 20px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  background: rgba(255, 255, 255, 0.08);
+  color: #e6f3ea;
+  cursor: pointer;
+  text-align: center;
+  min-width: 160px;
+  transition: border 0.2s ease, transform 0.2s ease;
+}
+
+.lang-pill .native {
+  font-size: 12px;
+  opacity: 0.7;
+}
+
+.lang-pill:hover {
+  border-color: #92ffcd;
+  transform: translateY(-2px);
 }
 
 .how-section {
