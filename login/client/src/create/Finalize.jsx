@@ -1,95 +1,128 @@
 import React, { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import "./SelectTime.css";
+import axios from "axios";
+import "./Finalize.css";
 
-export default function SelectTime() {
+export default function Finalize() {
   const navigate = useNavigate();
   const location = useLocation();
 
-  // From previous page (language selection)
-  const selectedGame = location.state?.selectedGame || null;
-  const selectedLanguage = location.state?.selectedLanguage || null;
+  const {
+    selectedGame,
+    selectedLanguages,
+    selectedTags,
+    timeRange,
+  } = location.state || {};
 
-  const [selectedTime, setSelectedTime] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
-  const times = [
-    "Morning", 
-    "Afternoon", 
-    "Evening", 
-    "Late Night", 
-    "Flexible", 
-    "Weekend"
-  ];
+  const handleCreate = async () => {
+    if (!selectedGame || !selectedLanguages || !selectedTags || !timeRange) {
+      setError("All fields must be filled before creating a parti.");
+      return;
+    }
 
-  const handleNext = () => {
-    if (!selectedTime) return;
+    setLoading(true);
+    setError("");
 
-    navigate("/finalize", {
-      state: {
-        selectedGame,
-        selectedLanguage,
-        selectedTime
+    try {
+      const res = await axios.post(
+        "http://localhost:3000/api/create-parti",
+        { selectedGame, selectedLanguages, selectedTags, timeRange },
+        { withCredentials: true }
+      );
+
+      if (res.data.success) {
+        navigate("/mypartis");
+      } else {
+        setError(res.data.message || "Failed to create parti.");
       }
-    });
+    } catch (err) {
+      console.error(err);
+      setError("Server error. Try again later.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
-    <div className="time-page">
-      
-      {/* Top Navigation Bar */}
+    <div className="finalize-page">
+      {/* Topbar */}
       <nav className="dashboard-topbar">
         <div className="dashboard-logo">Parti</div>
-
         <div className="dashboard-buttons">
           <button onClick={() => navigate("/dashboard")}>Home</button>
           <button onClick={() => navigate("/mypartis")}>My Partis</button>
           <button onClick={() => navigate("/findpartis")}>Find Partis</button>
-          <button onClick={() => navigate("/createparti")}>Create Parti</button>
-          <button onClick={() => navigate("/socials")}>Socials</button>
-
+          <button onClick={() => navigate("/create")}>Create Parti</button>
           <div className="account-bar">
             <button onClick={() => navigate("/login")}>Logout</button>
           </div>
         </div>
       </nav>
 
-      {/* Main Content */}
-      <div className="time-content">
-        <h1 className="create-title">Step 3: Choose the play time</h1>
+      {/* Content */}
+      <div className="finalize-content">
+        <h1 className="create-title">Finalize Your Parti</h1>
 
-        <p className="selected-game-label">
-          Selected game: <span>{selectedGame?.name}</span>
-        </p>
+        {error && <p style={{ color: "red" }}>{error}</p>}
 
-        <p className="selected-lang-label">
-          Language: <span>{selectedLanguage}</span>
-        </p>
+        <div className="final-box">
+          {selectedGame?.image && (
+            <img
+              src={selectedGame.image}
+              alt={selectedGame.name}
+              className="final-game-image"
+            />
+          )}
 
-        <div className="time-grid">
-          {times.map((t, index) => (
-            <div
-              key={index}
-              className={`time-card ${selectedTime === t ? "selected" : ""}`}
-              onClick={() => setSelectedTime(t)}
-            >
-              {t}
+          <div className="final-inner">
+            <div className="final-section">
+              <h2>Game</h2>
+              <p>{selectedGame?.name || "Not selected"}</p>
             </div>
-          ))}
+
+            <div className="final-section">
+              <h2>Languages</h2>
+              <p>{selectedLanguages?.join(", ") || "None selected"}</p>
+            </div>
+
+            <h2>Tags</h2>
+
+            <p className="tags">
+                    {selectedTags.map((tag, i) => (
+                      <span key={i}>{tag}</span>
+                    ))}
+                  </p>
+
+            <div className="final-section">
+              <h3>Time</h3>
+              {timeRange ? (
+                <p className="time-range">
+                {timeRange.startDate} {timeRange.startTime} - {timeRange.endDate} {timeRange.endTime}
+              </p>
+              ) : (
+                <p>No time selected</p>
+              )}
+            </div>
+          </div>
         </div>
       </div>
 
-      {/* Back + Next Buttons */}
+      {/* Bottom buttons */}
       <div className="back-next-container">
-        <button className="back-btn" onClick={() => navigate(-1)}>Back</button>
+        <button className="back-btn" onClick={() => navigate(-1)}>
+          Back
+        </button>
         <button
           className="next-btn"
-          disabled={!selectedTime}
-          onClick={handleNext}
+          onClick={handleCreate}
+          disabled={loading}
         >
-          Next
+          {loading ? "Creating..." : "Create Parti"}
         </button>
       </div>
-
     </div>
   );
 }

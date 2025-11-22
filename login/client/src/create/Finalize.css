@@ -1,0 +1,57 @@
+.finalize-page {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .finalize-content {
+    color: white;
+    text-align: center;
+  }
+  
+  .final-box {
+    background: rgba(0,0,0,0.45);
+    border-radius: 14px;
+    max-width: 550px;
+    margin: 20px auto;
+    backdrop-filter: blur(6px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .final-game-image {
+    width: 80%;
+    height: 300px;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    border-radius: 16px;
+    margin-top: 60px;
+    margin-bottom: 40px;
+    margin-left: 60px;
+    margin-right: 60px;
+  }
+  
+  .final-inner {
+    text-align: center;
+    width: 100%;
+    margin-bottom: 32px;
+  }
+  
+  .final-section {
+    margin-bottom: 18px;
+  }
+  
+  .final-section h3 {
+    font-size: 28px;
+    font-weight: 600;
+    margin-bottom:10px;
+    margin-top: 0px;
+  }
+
+  .final-section p {
+    font-size: 16px;
+    /* font-weight: 600; */
+    margin: 0px;
+  }
+  

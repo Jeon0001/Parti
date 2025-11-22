@@ -19,6 +19,10 @@ const PORT = 3000;
 // In-memory user storage (replace with DB for production)
 const users = []; // { email, password }
 
+const partis = []; 
+// Each parti object will be:
+// { hostUsername, selectedGame, selectedLanguages, selectedTags, timeRange }
+
 app.use(cors({
   origin: "http://localhost:5173", // your React dev server
   credentials: true
@@ -189,6 +193,36 @@ io.on('connection', (socket) => {
       }
     }
   });
+});
+
+// -------------------- Parti endpoints --------------------
+
+// Create a parti
+app.post("/api/create-parti", (req, res) => {
+  if (!req.session.user) return res.status(401).json({ success: false, message: "Not logged in" });
+
+  const { selectedGame, selectedLanguages, selectedTags, timeRange } = req.body;
+  const hostUsername = req.session.user.username;
+
+  partis.push({
+    hostUsername,
+    selectedGame,
+    selectedLanguages,
+    selectedTags,
+    timeRange
+  });
+
+  res.json({ success: true, message: "Parti created successfully" });
+});
+
+// Get partis of logged-in user
+app.get("/api/my-partis", (req, res) => {
+  if (!req.session.user) return res.status(401).json({ success: false, message: "Not logged in" });
+
+  const hostUsername = req.session.user.username;
+  const myPartis = partis.filter(p => p.hostUsername === hostUsername);
+
+  res.json({ success: true, partis: myPartis });
 });
 
 httpServer.listen(PORT, () => console.log(`Server running at http://localhost:${PORT}`));

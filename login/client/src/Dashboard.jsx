@@ -123,11 +123,14 @@ export default function Dashboard() {
           <button onClick={() => navigate("/socials")}>Socials</button>
         </div>
         <div className="dashboard-actions">
-          <button className="ghost-btn" onClick={() => navigate("/register")}>
+          {/* bruh faizan when you're in the dashboard page why bother login/register */}
+          {/* <button className="ghost-btn" onClick={() => navigate("/register")}>
             Register
-          </button>
+          </button> */}
+
+          {/* also below, when you're in dashboard, it's logout button that leads you to the login page, not the login button */}
           <button className="primary-btn" onClick={() => navigate("/login")}>
-            Login
+            Logout
           </button>
         </div>
       </nav>
