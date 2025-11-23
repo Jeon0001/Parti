@@ -67,7 +67,12 @@ export default function AllPartis() {
                 key={index}
                 onClick={() => {
                   if (parti.chatRoomName) {
-                    navigate('/chat', { state: { chatRoomName: parti.chatRoomName } });
+                    navigate('/chat', { 
+                      state: { 
+                        chatRoomName: parti.chatRoomName,
+                        partiVisibleName: parti.visibleName || parti.selectedGame?.name || 'Parti Chat'
+                      } 
+                    });
                   }
                 }}
                 style={{ cursor: parti.chatRoomName ? 'pointer' : 'default' }}

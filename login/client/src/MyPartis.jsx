@@ -120,7 +120,12 @@ export default function MyPartis() {
                 key={index}
                 onClick={() => {
                   if (parti.chatRoomName && editingParti !== parti.id) {
-                    navigate('/chat', { state: { chatRoomName: parti.chatRoomName } });
+                    navigate('/chat', { 
+                      state: { 
+                        chatRoomName: parti.chatRoomName,
+                        partiVisibleName: parti.visibleName || parti.selectedGame?.name || 'Parti Chat'
+                      } 
+                    });
                   }
                 }}
                 style={{ cursor: parti.chatRoomName && editingParti !== parti.id ? 'pointer' : 'default' }}

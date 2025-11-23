@@ -33,13 +33,19 @@ export default function SelectTime() {
   };
 
   const handleAnyTime = () => {
-    setIsAnyTime(true);
-    setTimeRange({
-      startDate: "",
-      startTime: "",
-      endDate: "",
-      endTime: "",
-    });
+    if (isAnyTime) {
+      // If already selected, unselect it
+      setIsAnyTime(false);
+    } else {
+      // If not selected, select it and clear custom time
+      setIsAnyTime(true);
+      setTimeRange({
+        startDate: "",
+        startTime: "",
+        endDate: "",
+        endTime: "",
+      });
+    }
   };
 
   const handleCustomTime = () => {
