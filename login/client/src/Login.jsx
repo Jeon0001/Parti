@@ -58,8 +58,7 @@ export default function Login() {
       </form>
       {error && <p className="error-msg">{error}</p>}
       <p>or</p>
-      <button className="google-btn"
-      >
+      <button className="google-btn" onClick={handleGoogleLogin}>
         Login with Google
       </button>
       <p>

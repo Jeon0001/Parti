@@ -1,8 +1,13 @@
+import dotenv from "dotenv";
+dotenv.config();
+
 import express from "express";
 import cors from "cors";
 import session from "express-session";
 import { createServer } from "http";
 import { Server } from "socket.io";
+import passport from "passport";
+import { Strategy as GoogleStrategy } from "passport-google-oauth20";
 
 const app = express();
 const httpServer = createServer(app);
@@ -14,7 +19,7 @@ const io = new Server(httpServer, {
   }
 });
 
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 
 // -------------------- In-memory storage --------------------
 const users = []; // { username, email, password }
@@ -37,11 +42,52 @@ app.use(cors({
 app.use(express.json());
 
 app.use(session({
-  secret: "secret-key",
+  secret: process.env.SESSION_SECRET || "secret-key",
   resave: false,
   saveUninitialized: true,
   cookie: { secure: false }
 }));
+
+// Initialize Passport
+app.use(passport.initialize());
+app.use(passport.session());
+
+// Google OAuth Strategy
+passport.use(new GoogleStrategy({
+  clientID: process.env.GOOGLE_CLIENT_ID,
+  clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+  callbackURL: process.env.GOOGLE_CALLBACK_URL || "http://localhost:3000/auth/google/callback"
+}, (accessToken, refreshToken, profile, done) => {
+  // Find or create user based on Google profile
+  const email = profile.emails[0].value;
+  const username = profile.displayName || profile.name.givenName;
+  
+  let user = users.find(u => u.email === email);
+  
+  if (!user) {
+    // Create new user from Google account
+    user = {
+      username: username,
+      email: email,
+      password: null, // No password for OAuth users
+      googleId: profile.id
+    };
+    users.push(user);
+  }
+  
+  return done(null, user);
+}));
+
+// Serialize user for session
+passport.serializeUser((user, done) => {
+  done(null, user.email);
+});
+
+// Deserialize user from session
+passport.deserializeUser((email, done) => {
+  const user = users.find(u => u.email === email);
+  done(null, user);
+});
 
 // -------------------- Register --------------------
 app.post("/api/register", (req, res) => {
@@ -267,7 +313,23 @@ app.put("/api/update-parti", (req, res) => {
   res.json({ success: true, message: "Parti updated successfully", parti });
 });
 
+// -------------------- Google OAuth Routes --------------------
+app.get("/auth/google",
+  passport.authenticate("google", { scope: ["profile", "email"] })
+);
 
+app.get("/auth/google/callback",
+  passport.authenticate("google", { failureRedirect: "http://localhost:5173/login" }),
+  (req, res) => {
+    // Successful authentication, set session
+    req.session.user = {
+      username: req.user.username,
+      email: req.user.email
+    };
+    // Redirect to dashboard
+    res.redirect("http://localhost:5173/dashboard");
+  }
+);
 
 // -------------------- Start Server --------------------
 httpServer.listen(PORT, () =>
