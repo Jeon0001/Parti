@@ -3,6 +3,11 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import io from 'socket.io-client';
 import './Chat.css';
 
+const socket = io('http://localhost:3000', {
+  withCredentials: true,
+  transports: ['websocket', 'polling']
+});
+
 export default function Chat() {
   const navigate = useNavigate();
   const location = useLocation();
@@ -22,7 +27,6 @@ export default function Chat() {
   const localVideoRef = useRef(null);
   const remoteVideoRef = useRef(null);
   const messagesEndRef = useRef(null);
-  const socketRef = useRef(null);
 
   // Get username from session
   useEffect(() => {
