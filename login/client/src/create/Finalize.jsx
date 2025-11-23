@@ -99,9 +99,13 @@ export default function Finalize() {
             <div className="final-section">
               <h3>Time</h3>
               {timeRange ? (
-                <p className="time-range">
-                {timeRange.startDate} {timeRange.startTime} - {timeRange.endDate} {timeRange.endTime}
-              </p>
+                timeRange.startDate === "Any" ? (
+                  <p className="time-range">Any Time</p>
+                ) : (
+                  <p className="time-range">
+                    {timeRange.startDate} {timeRange.startTime} - {timeRange.endDate} {timeRange.endTime}
+                  </p>
+                )
               ) : (
                 <p>No time selected</p>
               )}

@@ -1,8 +1,13 @@
+import dotenv from "dotenv";
+dotenv.config();
+
 import express from "express";
 import cors from "cors";
 import session from "express-session";
 import { createServer } from "http";
 import { Server } from "socket.io";
+import passport from "passport";
+import { Strategy as GoogleStrategy } from "passport-google-oauth20";
 
 const app = express();
 const httpServer = createServer(app);
@@ -14,7 +19,7 @@ const io = new Server(httpServer, {
   }
 });
 
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 
 // -------------------- In-memory storage --------------------
 const users = []; // { username, email, password }
@@ -25,6 +30,8 @@ const users = []; // { username, email, password }
 // NEW:
 const allPartis = [];         // all partis created by everyone
 const userPartis = {};        // key=username → array of partis
+const userPartiCounts = {};   // key=username → number of partis created (for chat room naming)
+const chatRoomIds = new Set(); // Track all chatroom IDs for uniqueness validation
 
 // -------------------- Middleware --------------------
 app.use(cors({
@@ -35,11 +42,52 @@ app.use(cors({
 app.use(express.json());
 
 app.use(session({
-  secret: "secret-key",
+  secret: process.env.SESSION_SECRET || "secret-key",
   resave: false,
   saveUninitialized: true,
   cookie: { secure: false }
 }));
+
+// Initialize Passport
+app.use(passport.initialize());
+app.use(passport.session());
+
+// Google OAuth Strategy
+passport.use(new GoogleStrategy({
+  clientID: process.env.GOOGLE_CLIENT_ID,
+  clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+  callbackURL: process.env.GOOGLE_CALLBACK_URL || "http://localhost:3000/auth/google/callback"
+}, (accessToken, refreshToken, profile, done) => {
+  // Find or create user based on Google profile
+  const email = profile.emails[0].value;
+  const username = profile.displayName || profile.name.givenName;
+  
+  let user = users.find(u => u.email === email);
+  
+  if (!user) {
+    // Create new user from Google account
+    user = {
+      username: username,
+      email: email,
+      password: null, // No password for OAuth users
+      googleId: profile.id
+    };
+    users.push(user);
+  }
+  
+  return done(null, user);
+}));
+
+// Serialize user for session
+passport.serializeUser((user, done) => {
+  done(null, user.email);
+});
+
+// Deserialize user from session
+passport.deserializeUser((email, done) => {
+  const user = users.find(u => u.email === email);
+  done(null, user);
+});
 
 // -------------------- Register --------------------
 app.post("/api/register", (req, res) => {
@@ -161,6 +209,23 @@ app.post("/api/create-parti", (req, res) => {
   const { selectedGame, selectedLanguages, selectedTags, timeRange } = req.body;
   const hostUsername = req.session.user.username;
 
+  // Increment parti count for this user
+  if (!userPartiCounts[hostUsername]) {
+    userPartiCounts[hostUsername] = 0;
+  }
+  userPartiCounts[hostUsername] += 1;
+
+  // Generate chat room name: (username)_parti_[number]
+  let chatRoomName = `${hostUsername}_parti_${userPartiCounts[hostUsername]}`;
+  
+  // Ensure uniqueness (in case of edge cases)
+  let counter = 1;
+  while (chatRoomIds.has(chatRoomName)) {
+    chatRoomName = `${hostUsername}_parti_${userPartiCounts[hostUsername]}_${counter}`;
+    counter++;
+  }
+  chatRoomIds.add(chatRoomName);
+
   const parti = {
     id: Date.now(),
     hostUsername,
@@ -168,6 +233,8 @@ app.post("/api/create-parti", (req, res) => {
     selectedLanguages,
     selectedTags,
     timeRange,
+    chatRoomName, // Store the chat room name (ID)
+    visibleName: null, // Custom visible name (null means use selectedGame.name)
     createdAt: new Date()
   };
 
@@ -203,7 +270,66 @@ app.get("/api/allpartis", (req, res) => {
   });
 });
 
+// Update parti (chatroom ID and visible name)
+app.put("/api/update-parti", (req, res) => {
+  if (!req.session.user)
+    return res.status(401).json({ success: false, message: "Not logged in" });
 
+  const { partiId, chatRoomName, visibleName } = req.body;
+  const username = req.session.user.username;
+
+  // Find the parti
+  const parti = allPartis.find(p => p.id === partiId);
+  if (!parti) {
+    return res.status(404).json({ success: false, message: "Parti not found" });
+  }
+
+  // Check if user owns this parti
+  if (parti.hostUsername !== username) {
+    return res.status(403).json({ success: false, message: "You can only edit your own partis" });
+  }
+
+  // If chatRoomName is being changed, validate uniqueness
+  if (chatRoomName && chatRoomName !== parti.chatRoomName) {
+    // Check if the new ID is already taken
+    if (chatRoomIds.has(chatRoomName)) {
+      return res.status(400).json({ 
+        success: false, 
+        message: "This chatroom ID is already taken. Please choose a different one." 
+      });
+    }
+
+    // Remove old ID and add new one
+    chatRoomIds.delete(parti.chatRoomName);
+    chatRoomIds.add(chatRoomName);
+    parti.chatRoomName = chatRoomName;
+  }
+
+  // Update visible name if provided
+  if (visibleName !== undefined) {
+    parti.visibleName = visibleName || null; // Allow empty string to reset to null
+  }
+
+  res.json({ success: true, message: "Parti updated successfully", parti });
+});
+
+// -------------------- Google OAuth Routes --------------------
+app.get("/auth/google",
+  passport.authenticate("google", { scope: ["profile", "email"] })
+);
+
+app.get("/auth/google/callback",
+  passport.authenticate("google", { failureRedirect: "http://localhost:5173/login" }),
+  (req, res) => {
+    // Successful authentication, set session
+    req.session.user = {
+      username: req.user.username,
+      email: req.user.email
+    };
+    // Redirect to dashboard
+    res.redirect("http://localhost:5173/dashboard");
+  }
+);
 
 // -------------------- Start Server --------------------
 httpServer.listen(PORT, () =>
