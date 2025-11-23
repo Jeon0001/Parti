@@ -101,6 +101,7 @@ export default function MyPartis() {
           <button onClick={() => navigate("/mypartis")}>My Partis</button>
           <button onClick={() => navigate("/findpartis")}>Find Partis</button>
           <button onClick={() => navigate("/createparti")}>Create Parti</button>
+          <button onClick={() => navigate("/socials")}>Socials</button>
           <div className="account-bar">
             <button onClick={() => navigate("/login")}>Logout</button>
           </div>

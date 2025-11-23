@@ -6,6 +6,9 @@ import Dashboard from "./Dashboard";
 import MyPartis from "./MyPartis"
 import CreateParti from "./create/CreateParti";
 import FindParti from "./find/FindParti";
+import FindSelectLanguage from "./find/SelectLanguage"
+import FindSelectTags from "./find/SelectTags"
+import FindSelectTime from "./find/SelectTime"
 import CreateSelectLanguage from "./create/SelectLanguage"
 import CreateSelectTags from "./create/SelectTags"
 import CreateSelectTime from "./create/SelectTime"
@@ -30,6 +33,9 @@ export default function App() {
         <Route path="/create/selecttags" element={<CreateSelectTags />} />
         <Route path="/create/selecttime" element={<CreateSelectTime />} />
         <Route path="/create/finalize" element={<CreateFinalize />} />
+        <Route path="/find/selectlanguage" element={<FindSelectLanguage />} />
+        <Route path="/find/selecttags" element={<FindSelectTags />} />
+        <Route path="/find/selecttime" element={<FindSelectTime />} />
         <Route path="/allpartis" element={<AllPartis />} />
         <Route path="/mypartis" element={<MyPartis />} />
         <Route path="/chat" element={<Chat />} />

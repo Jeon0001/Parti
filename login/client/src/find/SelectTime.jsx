@@ -6,7 +6,7 @@ export default function SelectTime() {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const { selectedGame, selectedLanguages, selectedTags } = location.state || {};
+  const { selectedGames, selectedLanguages, selectedTags } = location.state || {};
 
   // Store date & time in a dictionary
   const [timeRange, setTimeRange] = useState({
@@ -18,13 +18,19 @@ export default function SelectTime() {
   const [isAnyTime, setIsAnyTime] = useState(false);
 
   const handleNext = () => {
+    
     const finalTimeRange = isAnyTime 
       ? { startDate: "Any", startTime: "Any", endDate: "Any", endTime: "Any" }
       : timeRange;
     
-    navigate("/create/finalize", {
+    console.log("Selected Game:", selectedGames);
+    console.log("Selected Languages:", selectedLanguages);
+    console.log("Selected Tags:", selectedTags);
+    console.log("Selected Time:", finalTimeRange);
+
+    navigate("/allpartis", {
       state: {
-        selectedGame,
+        selectedGames,
         selectedLanguages,
         selectedTags,
         timeRange: finalTimeRange,

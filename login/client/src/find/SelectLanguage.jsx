@@ -22,11 +22,16 @@ export default function SelectLanguage() {
           setSelectedLanguages([...selectedLanguages, lang]);
         }
       };
+
+      const handleNext = () =>  {
+        console.log("Selected Game:", selectedGames);
+        console.log("Selected Languages:", selectedLanguages);
+        navigate("/find/selecttags", { state: { selectedGames, selectedLanguages } })}
       
 
   const navigate = useNavigate();
   const location = useLocation();
-  const { selectedGame } = location.state || {};
+  const { selectedGames } = location.state || {};
 
   return (
     <div className="language-page">
@@ -91,7 +96,7 @@ export default function SelectLanguage() {
         <button
   className="next-btn"
   disabled={selectedLanguages.length === 0}
-  onClick={() => navigate("/create/selecttags", { state: { selectedGame, selectedLanguages } })}
+  onClick={handleNext}
 >
   Next
 </button>

@@ -6,27 +6,28 @@ import { popularGames } from "../data/options";
 export default function FindParti() {
   const [searchQuery, setSearchQuery] = useState("");
 
-  // Store selected games as a dictionary
-  const [selectedGames, setSelectedGames] = useState({});
+  // Store selected games as an array instead of dict
+  const [selectedGames, setSelectedGames] = useState([]);
 
   const toggleGame = (game) => {
     setSelectedGames((prev) => {
-      const copy = { ...prev };
+      const exists = prev.find((g) => g.name === game.name);
 
-      if (copy[game.name]) {
-        delete copy[game.name]; // remove game
+      if (exists) {
+        // remove game
+        return prev.filter((g) => g.name !== game.name);
       } else {
-        copy[game.name] = game; // add game
+        // add game
+        return [...prev, game];
       }
-
-      return copy;
     });
   };
 
   const navigate = useNavigate();
 
   const handleNext = () => {
-    if (Object.keys(selectedGames).length === 0) return;
+    console.log("Selected Games:", selectedGames);
+    if (selectedGames.length === 0) return;
     navigate("/find/selectlanguage", { state: { selectedGames } });
   };
 
@@ -66,7 +67,7 @@ export default function FindParti() {
 
         <div className="games-grid">
           {filteredGames.map((game) => {
-            const isSelected = !!selectedGames[game.name];
+            const isSelected = selectedGames.some((g) => g.name === game.name);
 
             return (
               <div
@@ -87,7 +88,7 @@ export default function FindParti() {
         <button className="back-btn" onClick={() => navigate(-1)}>Back</button>
         <button
           className="next-btn"
-          disabled={Object.keys(selectedGames).length === 0}
+          disabled={selectedGames.length === 0}
           onClick={handleNext}
         >
           Next

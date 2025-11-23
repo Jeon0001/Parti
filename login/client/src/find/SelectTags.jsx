@@ -5,7 +5,7 @@ import "./SelectTags.css";
 export default function SelectTags() {
   const navigate = useNavigate();
   const location = useLocation();
-  const { selectedGame, selectedLanguages } = location.state || {};
+  const { selectedGames, selectedLanguages } = location.state || {};
 
   const popularTags = [
     "Chill", "Fun", "Ranked", "Casual", "Competitive",
@@ -64,10 +64,10 @@ export default function SelectTags() {
   };
 
   const handleNext = () => {
-    // console.log("Selected Game:", selectedGame);
-    // console.log("Selected Languages:", selectedLanguages);
-    // console.log("Selected Tags:", selectedTags);
-    navigate("/create/selecttime", { state: { selectedGame, selectedLanguages, selectedTags } });
+    console.log("Selected Game:", selectedGames);
+    console.log("Selected Languages:", selectedLanguages);
+    console.log("Selected Tags:", selectedTags);
+    navigate("/find/selecttime", { state: { selectedGames, selectedLanguages, selectedTags } });
   };
 
   return (
@@ -97,8 +97,14 @@ export default function SelectTags() {
           
           
           <p>
-            Selected Game: <span>{selectedGame?.name || "None"}</span>
-          </p>
+  Selected Games:{" "}
+  <span>
+    {selectedGames?.length > 0
+      ? selectedGames.map(g => g.name).join(", ")
+      : "None"}
+  </span>
+</p>
+
           <p>
             Selected Languages: <span>{selectedLanguages?.length > 0 ? selectedLanguages.join(", ") : "None"}</span>
           </p>
