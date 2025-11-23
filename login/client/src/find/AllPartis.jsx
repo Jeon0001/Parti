@@ -62,7 +62,16 @@ export default function AllPartis() {
         <div className="parti-grid">
           {Array.isArray(partis) &&
             partis.map((parti, index) => (
-              <div className="parti-card" key={index}>
+              <div 
+                className="parti-card" 
+                key={index}
+                onClick={() => {
+                  if (parti.chatRoomName) {
+                    navigate('/chat', { state: { chatRoomName: parti.chatRoomName } });
+                  }
+                }}
+                style={{ cursor: parti.chatRoomName ? 'pointer' : 'default' }}
+              >
                 {parti.selectedGame?.image && (
                   <img
                     src={parti.selectedGame.image}
@@ -71,10 +80,15 @@ export default function AllPartis() {
                   />
                 )}
                 <div className="parti-card-content">
-                  <h3>{parti.selectedGame?.name}</h3>
+                  <h3>{parti.visibleName || parti.selectedGame?.name}</h3>
                   <p>
                     <strong>Host:</strong> {parti.hostUsername}
                   </p>
+                  {parti.chatRoomName && (
+                    <p>
+                      <strong>Chatroom ID:</strong> {parti.chatRoomName}
+                    </p>
+                  )}
                   <p>
                     <strong>Languages:</strong>{" "}
                     {parti.selectedLanguages?.join(", ")}
@@ -89,6 +103,11 @@ export default function AllPartis() {
                       ? `${parti.timeRange.startDate} ${parti.timeRange.startTime} - ${parti.timeRange.endDate} ${parti.timeRange.endTime}`
                       : "No time selected"}
                   </p>
+                  {parti.chatRoomName && (
+                    <p style={{ marginTop: '10px', color: '#9ed6b9', fontSize: '14px' }}>
+                      Click to join chat room
+                    </p>
+                  )}
                 </div>
               </div>
             ))}

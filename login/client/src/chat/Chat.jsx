@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import io from 'socket.io-client';
 import './Chat.css';
 
@@ -10,6 +10,7 @@ const socket = io('http://localhost:3000', {
 
 export default function Chat() {
   const navigate = useNavigate();
+  const location = useLocation();
   const [username, setUsername] = useState('');
   const [callId, setCallId] = useState('');
   const [joinCallId, setJoinCallId] = useState('');
@@ -18,6 +19,7 @@ export default function Chat() {
   const [messageInput, setMessageInput] = useState('');
   const [isMuted, setIsMuted] = useState(false);
   const [participants, setParticipants] = useState([]);
+  const [autoJoining, setAutoJoining] = useState(false);
 
   const localStreamRef = useRef(null);
   const remoteStreamRef = useRef(null);
@@ -39,6 +41,63 @@ export default function Chat() {
       })
       .catch(() => navigate('/login'));
   }, [navigate]);
+
+  // Auto-join chat room if chatRoomName is provided from navigation
+  useEffect(() => {
+    const chatRoomName = location.state?.chatRoomName;
+    if (chatRoomName && username && !inCall && !autoJoining) {
+      setAutoJoining(true);
+      // Use the joinCall logic directly here to avoid dependency issues
+      const targetCallId = chatRoomName;
+      
+      navigator.mediaDevices.getUserMedia({ 
+        audio: true, 
+        video: false 
+      }).then(stream => {
+        localStreamRef.current = stream;
+        if (localVideoRef.current) {
+          localVideoRef.current.srcObject = stream;
+        }
+
+        const pc = new RTCPeerConnection({
+          iceServers: [{ urls: 'stun:stun.l.google.com:19302' }]
+        });
+
+        peerConnectionRef.current = pc;
+
+        stream.getTracks().forEach(track => {
+          pc.addTrack(track, stream);
+        });
+
+        pc.ontrack = (event) => {
+          if (remoteVideoRef.current) {
+            remoteVideoRef.current.srcObject = event.streams[0];
+          }
+          remoteStreamRef.current = event.streams[0];
+        };
+
+        pc.onicecandidate = (event) => {
+          if (event.candidate) {
+            socket.emit('ice-candidate', {
+              callId: targetCallId,
+              candidate: event.candidate
+            });
+          }
+        };
+
+        socket.emit('join-call', { callId: targetCallId, username });
+        setCallId(targetCallId);
+        setInCall(true);
+        addMessage('system', `Joined chat room: ${targetCallId}`);
+        setAutoJoining(false);
+      }).catch(error => {
+        console.error('Error accessing media devices:', error);
+        alert('Error accessing microphone. Please check permissions.');
+        setAutoJoining(false);
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [username, location.state?.chatRoomName, inCall, autoJoining]);
 
   // Socket event handlers
   useEffect(() => {
@@ -187,8 +246,9 @@ export default function Chat() {
     }
   };
 
-  const joinCall = async () => {
-    if (!joinCallId || !username) return;
+  const joinCall = async (roomName = null) => {
+    const targetCallId = roomName || joinCallId;
+    if (!targetCallId || !username) return;
 
     try {
       // Get user media
@@ -226,20 +286,22 @@ export default function Chat() {
       pc.onicecandidate = (event) => {
         if (event.candidate) {
           socket.emit('ice-candidate', {
-            callId: joinCallId,
+            callId: targetCallId,
             candidate: event.candidate
           });
         }
       };
 
       // Join the room
-      socket.emit('join-call', { callId: joinCallId, username });
-      setCallId(joinCallId);
+      socket.emit('join-call', { callId: targetCallId, username });
+      setCallId(targetCallId);
       setInCall(true);
-      addMessage('system', `Joined call: ${joinCallId}`);
+      addMessage('system', `Joined call: ${targetCallId}`);
+      setAutoJoining(false);
     } catch (error) {
       console.error('Error accessing media devices:', error);
       alert('Error accessing microphone. Please check permissions.');
+      setAutoJoining(false);
     }
   };
 
@@ -348,16 +410,19 @@ export default function Chat() {
           </div>
 
           <div className="setup-section">
-            <h2>Join a Call</h2>
+            <h2>Join a Parti Chatroom</h2>
             <div className="input-group">
               <input
                 type="text"
-                placeholder="Enter call ID to join"
+                placeholder="Enter chatroom ID to join"
                 value={joinCallId}
                 onChange={(e) => setJoinCallId(e.target.value)}
               />
-              <button onClick={joinCall}>Join Call</button>
+              <button onClick={() => joinCall()}>Join Chatroom</button>
             </div>
+            <p style={{ marginTop: '10px', fontSize: '14px', color: '#9ed6b9', opacity: 0.8 }}>
+              Enter the chatroom ID from a parti to join its chat
+            </p>
           </div>
         </div>
       ) : (

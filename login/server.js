@@ -25,6 +25,8 @@ const users = []; // { username, email, password }
 // NEW:
 const allPartis = [];         // all partis created by everyone
 const userPartis = {};        // key=username → array of partis
+const userPartiCounts = {};   // key=username → number of partis created (for chat room naming)
+const chatRoomIds = new Set(); // Track all chatroom IDs for uniqueness validation
 
 // -------------------- Middleware --------------------
 app.use(cors({
@@ -161,6 +163,23 @@ app.post("/api/create-parti", (req, res) => {
   const { selectedGame, selectedLanguages, selectedTags, timeRange } = req.body;
   const hostUsername = req.session.user.username;
 
+  // Increment parti count for this user
+  if (!userPartiCounts[hostUsername]) {
+    userPartiCounts[hostUsername] = 0;
+  }
+  userPartiCounts[hostUsername] += 1;
+
+  // Generate chat room name: (username)_parti_[number]
+  let chatRoomName = `${hostUsername}_parti_${userPartiCounts[hostUsername]}`;
+  
+  // Ensure uniqueness (in case of edge cases)
+  let counter = 1;
+  while (chatRoomIds.has(chatRoomName)) {
+    chatRoomName = `${hostUsername}_parti_${userPartiCounts[hostUsername]}_${counter}`;
+    counter++;
+  }
+  chatRoomIds.add(chatRoomName);
+
   const parti = {
     id: Date.now(),
     hostUsername,
@@ -168,6 +187,8 @@ app.post("/api/create-parti", (req, res) => {
     selectedLanguages,
     selectedTags,
     timeRange,
+    chatRoomName, // Store the chat room name (ID)
+    visibleName: null, // Custom visible name (null means use selectedGame.name)
     createdAt: new Date()
   };
 
@@ -201,6 +222,49 @@ app.get("/api/all-partis", (req, res) => {
     success: true,
     partis: allPartis
   });
+});
+
+// Update parti (chatroom ID and visible name)
+app.put("/api/update-parti", (req, res) => {
+  if (!req.session.user)
+    return res.status(401).json({ success: false, message: "Not logged in" });
+
+  const { partiId, chatRoomName, visibleName } = req.body;
+  const username = req.session.user.username;
+
+  // Find the parti
+  const parti = allPartis.find(p => p.id === partiId);
+  if (!parti) {
+    return res.status(404).json({ success: false, message: "Parti not found" });
+  }
+
+  // Check if user owns this parti
+  if (parti.hostUsername !== username) {
+    return res.status(403).json({ success: false, message: "You can only edit your own partis" });
+  }
+
+  // If chatRoomName is being changed, validate uniqueness
+  if (chatRoomName && chatRoomName !== parti.chatRoomName) {
+    // Check if the new ID is already taken
+    if (chatRoomIds.has(chatRoomName)) {
+      return res.status(400).json({ 
+        success: false, 
+        message: "This chatroom ID is already taken. Please choose a different one." 
+      });
+    }
+
+    // Remove old ID and add new one
+    chatRoomIds.delete(parti.chatRoomName);
+    chatRoomIds.add(chatRoomName);
+    parti.chatRoomName = chatRoomName;
+  }
+
+  // Update visible name if provided
+  if (visibleName !== undefined) {
+    parti.visibleName = visibleName || null; // Allow empty string to reset to null
+  }
+
+  res.json({ success: true, message: "Parti updated successfully", parti });
 });
 
 
