@@ -12,7 +12,7 @@ export default function AllPartis() {
   useEffect(() => {
     const fetchPartis = async () => {
       try {
-        const res = await axios.get("http://localhost:3000/api/all-partis", {
+        const res = await axios.get("http://localhost:3000/api/allpartis", {
           withCredentials: true,
         });
 

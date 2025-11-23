@@ -195,8 +195,8 @@ app.get("/api/my-partis", (req, res) => {
   });
 });
 
-// NEW: Get ALL partis
-app.get("/api/all-partis", (req, res) => {
+// This is allpartis, not all-partis... I think someone changed it by accident
+app.get("/api/allpartis", (req, res) => {
   res.json({
     success: true,
     partis: allPartis

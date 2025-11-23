@@ -1,81 +1,79 @@
-.allpartis-title {
-    text-align: center;
-    margin-top: 30px;
-    font-size: 32px;
-    font-weight: 600;
+.allpartis-content {
+    max-width: 1200px;
+    width: 100%;
+    margin: 0 auto 40px auto;
+    padding: 0 10px;
   }
   
-  /* ---------- Grid Layout ---------- */
-  .allpartis-grid {
-    margin-top: 30px;
-    padding: 0 40px;
+  /* Grid layout: up to 4 cards per row, responsive */
+  .parti-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
-    grid-gap: 25px;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 250px));
+    gap: 24px;
   }
   
-  /* ---------- Parti Card ---------- */
+  /* Each card */
   .parti-card {
-    background: rgba(30, 30, 30, 0.9);
-    padding: 15px;
-    border-radius: 16px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    transition: 0.25s;
-    border: 1px solid #2a2a2a;
+    background: rgba(0, 0, 0, 0.7);
+    border-radius: 12px;
+    overflow: hidden;
+    text-align: center;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.5);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
   }
   
   .parti-card:hover {
     transform: translateY(-5px);
-    border: 1px solid #c96aff;
-    box-shadow: 0 0 12px rgba(201, 106, 255, 0.4);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.7);
   }
   
-  /* ---------- Game Image ---------- */
-  .parti-image {
+  /* Game image on card */
+  .parti-card img {
     width: 100%;
-    aspect-ratio: 1 / 1; /* Makes it a perfect square */
+    aspect-ratio: 1 / 1;
     object-fit: cover;
-    border-radius: 15px;
-    margin-bottom: 12px;
-  }
-  
-  /* ---------- Text ---------- */
-  .parti-name {
-    font-size: 20px;
-    font-weight: 600;
-    margin: 5px 0;
-    text-align: center;
-  }
-  
-  .parti-host {
-    font-size: 14px;
-    opacity: 0.7;
-    margin-bottom: 10px;
-  }
-  
-  /* ---------- Tags ---------- */
-  .parti-tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px;
-    justify-content: center;
-    margin: 10px 0;
-  }
-  
-  .parti-tags span {
-    padding: 4px 10px;
-    background: #c96aff33;
-    border: 1px solid #c96aff;
     border-radius: 12px;
+  }
+  
+  /* Card content */
+  .parti-card-content {
+    padding: 16px;
+  }
+  
+  .parti-card-content h3 {
+    font-size: 22px;
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+  
+  .parti-card-content p {
+    font-size: 16px;
+    margin: 4px 0;
+    color: #d0d0d0;
+  }
+  
+  .parti-card-content .time-range,
+  .parti-card-content .tags {
+    margin-top: 8px;
+    font-size: 14px;
+    color: #a0a0a0;
+  }
+  
+  .tags span {
+    background: #306844;
+    color: white;
+    padding: 2px 8px;
+    border-radius: 6px;
+    margin: 2px;
+    display: inline-block;
     font-size: 12px;
   }
   
-  /* ---------- Time Range ---------- */
-  .parti-time {
-    font-size: 13px;
-    margin-top: 8px;
-    opacity: 0.8;
+  /* No partis message */
+  .no-partis {
     text-align: center;
+    font-size: 20px;
+    color: #bbbbbb;
+    margin-top: 50px;
   }
+  
