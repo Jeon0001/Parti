@@ -122,7 +122,8 @@ app.get("/api/dashboard", (req, res) => {
 });
 
 // -------------------- WebRTC Logic (unchanged) --------------------
-const activeCalls = new Map();
+const activeCalls = new Map(); // callId -> Set of socket IDs
+const callParticipants = new Map(); // callId -> Map of socketId -> username
 
 io.on("connection", (socket) => {
   console.log("User connected:", socket.id);
@@ -132,15 +133,27 @@ io.on("connection", (socket) => {
 
     if (!activeCalls.has(callId)) {
       activeCalls.set(callId, new Set());
+      callParticipants.set(callId, new Map());
     }
     activeCalls.get(callId).add(socket.id);
+    callParticipants.get(callId).set(socket.id, username);
 
     const participants = Array.from(activeCalls.get(callId));
+    const participantCount = participants.length;
+    const participantUsernames = Array.from(callParticipants.get(callId).values());
 
+    // Notify other users in the call
     socket.to(callId).emit("user-joined", {
       username,
-      participants: participants.length,
+      participants: participantCount,
+      participantUsernames: participantUsernames,
       socketId: socket.id
+    });
+
+    // Notify the user who just joined about the current participants
+    socket.emit("joined-call", {
+      participants: participantCount,
+      participantUsernames: participantUsernames
     });
 
     const otherParticipants = participants.filter(id => id !== socket.id);
@@ -156,13 +169,19 @@ io.on("connection", (socket) => {
 
     if (activeCalls.has(callId)) {
       activeCalls.get(callId).delete(socket.id);
-      if (activeCalls.get(callId).size === 0) {
+      callParticipants.get(callId)?.delete(socket.id);
+      const remainingCount = activeCalls.get(callId).size;
+      
+      if (remainingCount === 0) {
         activeCalls.delete(callId);
+        callParticipants.delete(callId);
       } else {
-        const participants = Array.from(activeCalls.get(callId));
-        socket.to(callId).emit("user-left", {
+        const remainingUsernames = Array.from(callParticipants.get(callId).values());
+        // Notify remaining participants about the updated list
+        io.to(callId).emit("user-left", {
           username,
-          participants: participants.length
+          participants: remainingCount,
+          participantUsernames: remainingUsernames
         });
       }
     }
@@ -192,9 +211,22 @@ io.on("connection", (socket) => {
     console.log("User disconnected:", socket.id);
     for (const [callId, participants] of activeCalls.entries()) {
       if (participants.has(socket.id)) {
+        const disconnectedUsername = callParticipants.get(callId)?.get(socket.id) || "User";
         participants.delete(socket.id);
-        if (participants.size === 0) {
+        callParticipants.get(callId)?.delete(socket.id);
+        const remainingCount = participants.size;
+        
+        if (remainingCount === 0) {
           activeCalls.delete(callId);
+          callParticipants.delete(callId);
+        } else {
+          const remainingUsernames = Array.from(callParticipants.get(callId).values());
+          // Notify remaining participants about the disconnect
+          io.to(callId).emit("user-left", {
+            username: disconnectedUsername,
+            participants: remainingCount,
+            participantUsernames: remainingUsernames
+          });
         }
       }
     }

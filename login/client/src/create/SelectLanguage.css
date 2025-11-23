@@ -6,6 +6,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  padding-top: 140px;
   }
   
   /* Same top bar style as always */
@@ -62,12 +63,42 @@
   
   /* Main content */
 
-  .create-title {
-    margin-top: 160px;
-    font-size: 48px;
-    font-weight: 700;
-    margin-bottom: 60px;
+  .language-content {
     text-align: center;
+    width: min(1200px, 92vw);
+    margin: 0 auto;
+  }
+
+  .step-hero {
+    max-width: 720px;
+    margin: 0 auto 40px;
+  }
+
+  .step-label {
+    text-transform: uppercase;
+    letter-spacing: 0.4em;
+    font-size: 12px;
+    color: #92eabb;
+    margin-bottom: 12px;
+  }
+  
+  .create-title {
+    font-size: clamp(2.5rem, 4vw, 3.4rem);
+    margin: 0 0 12px;
+  }
+
+  .sub-text {
+    color: #9ed6b9;
+    font-size: 16px;
+    margin: 0;
+  }
+
+  .step-prefix {
+    color: #92eabb;
+    text-transform: uppercase;
+    letter-spacing: 0.25em;
+    font-size: 0.45em;
+    margin-right: 12px;
   }
 
   .language-search {
@@ -112,10 +143,6 @@
   .language-card.selected {
     border: 2px solid #49a37b;
     background: #2a4a3f;
-  }
-  
-  .language-content {
-    text-align: center;
   }
   
   .language-title {

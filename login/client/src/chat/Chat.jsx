@@ -18,8 +18,11 @@ export default function Chat() {
   const [messages, setMessages] = useState([]);
   const [messageInput, setMessageInput] = useState('');
   const [isMuted, setIsMuted] = useState(false);
-  const [participants, setParticipants] = useState([]);
+  const [participants, setParticipants] = useState(0);
+  const [participantUsernames, setParticipantUsernames] = useState([]);
   const [autoJoining, setAutoJoining] = useState(false);
+  const [partiVisibleName, setPartiVisibleName] = useState(null);
+  const [hasManuallyLeft, setHasManuallyLeft] = useState(false);
 
   const localStreamRef = useRef(null);
   const remoteStreamRef = useRef(null);
@@ -45,8 +48,12 @@ export default function Chat() {
   // Auto-join chat room if chatRoomName is provided from navigation
   useEffect(() => {
     const chatRoomName = location.state?.chatRoomName;
-    if (chatRoomName && username && !inCall && !autoJoining) {
+    const visibleName = location.state?.partiVisibleName;
+    if (chatRoomName && username && !inCall && !autoJoining && !hasManuallyLeft) {
       setAutoJoining(true);
+      if (visibleName) {
+        setPartiVisibleName(visibleName);
+      }
       // Use the joinCall logic directly here to avoid dependency issues
       const targetCallId = chatRoomName;
       
@@ -97,12 +104,19 @@ export default function Chat() {
       });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [username, location.state?.chatRoomName, inCall, autoJoining]);
+  }, [username, location.state?.chatRoomName, inCall, autoJoining, hasManuallyLeft]);
 
   // Socket event handlers
   useEffect(() => {
+    socket.on('joined-call', (data) => {
+      // Set initial participant count and usernames when we join
+      setParticipants(data.participants);
+      setParticipantUsernames(data.participantUsernames || []);
+    });
+
     socket.on('user-joined', async (data) => {
       setParticipants(data.participants);
+      setParticipantUsernames(data.participantUsernames || []);
       addMessage('system', `${data.username} joined the call`);
       
       // If we're already in a call and a new user joins, create an offer
@@ -124,6 +138,7 @@ export default function Chat() {
 
     socket.on('user-left', (data) => {
       setParticipants(data.participants);
+      setParticipantUsernames(data.participantUsernames || []);
       addMessage('system', `${data.username} left the call`);
     });
 
@@ -165,6 +180,7 @@ export default function Chat() {
     });
 
     return () => {
+      socket.off('joined-call');
       socket.off('user-joined');
       socket.off('user-left');
       socket.off('offer');
@@ -191,6 +207,7 @@ export default function Chat() {
   const createCall = async () => {
     if (!username) return;
     
+    setHasManuallyLeft(false); // Reset flag when creating a call
     const newCallId = callId || generateCallId();
     setCallId(newCallId);
     
@@ -249,6 +266,8 @@ export default function Chat() {
   const joinCall = async (roomName = null) => {
     const targetCallId = roomName || joinCallId;
     if (!targetCallId || !username) return;
+    
+    setHasManuallyLeft(false); // Reset flag when manually joining
 
     try {
       // Get user media
@@ -353,7 +372,9 @@ export default function Chat() {
     setCallId('');
     setJoinCallId('');
     setMessages([]);
-    setParticipants([]);
+    setParticipants(0);
+    setParticipantUsernames([]);
+    setHasManuallyLeft(true); // Prevent auto-rejoin
     if (localVideoRef.current) localVideoRef.current.srcObject = null;
     if (remoteVideoRef.current) remoteVideoRef.current.srcObject = null;
   };
@@ -430,9 +451,74 @@ export default function Chat() {
         </div>
       ) : (
         <div className="call-active">
+          {/* Members Top Bar */}
+          <div style={{
+            background: 'rgba(3, 19, 13, 0.7)',
+            backdropFilter: 'blur(10px)',
+            border: '1px solid rgba(255, 255, 255, 0.06)',
+            borderRadius: '12px',
+            padding: '12px 20px',
+            marginBottom: '20px',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '12px',
+            flexWrap: 'wrap'
+          }}>
+            <span style={{ 
+              fontSize: '14px', 
+              color: '#9ed6b9', 
+              fontWeight: '600',
+              marginRight: '8px'
+            }}>
+              Members ({participants || 0}):
+            </span>
+            {participantUsernames.length > 0 ? (
+              participantUsernames.map((name, idx) => (
+                <span
+                  key={idx}
+                  style={{
+                    background: name === username 
+                      ? 'rgba(158, 214, 185, 0.25)' 
+                      : 'rgba(158, 214, 185, 0.15)',
+                    border: name === username
+                      ? '1px solid rgba(158, 214, 185, 0.5)'
+                      : '1px solid rgba(158, 214, 185, 0.3)',
+                    borderRadius: '12px',
+                    padding: '6px 12px',
+                    fontSize: '13px',
+                    color: '#9ed6b9',
+                    fontWeight: name === username ? '600' : '500'
+                  }}
+                >
+                  {name === username ? `${name} (You)` : name}
+                </span>
+              ))
+            ) : username ? (
+              <span style={{
+                background: 'rgba(158, 214, 185, 0.25)',
+                border: '1px solid rgba(158, 214, 185, 0.5)',
+                borderRadius: '12px',
+                padding: '6px 12px',
+                fontSize: '13px',
+                color: '#9ed6b9',
+                fontWeight: '600'
+              }}>
+                {username} (You)
+              </span>
+            ) : (
+              <span style={{ fontSize: '13px', color: '#9ed6b9', opacity: 0.7 }}>
+                Loading members...
+              </span>
+            )}
+          </div>
+
           <div className="call-info">
-            <h2>Call ID: {callId}</h2>
-            <p>Participants: {participants.length}</p>
+            <h2>{partiVisibleName || `Call ID: ${callId}`}</h2>
+            {partiVisibleName && (
+              <p style={{ fontSize: '14px', color: '#9ed6b9', opacity: 0.8, marginTop: '4px' }}>
+                Chatroom ID: {callId}
+              </p>
+            )}
           </div>
 
           <div className="call-content">

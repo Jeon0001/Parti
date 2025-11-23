@@ -115,79 +115,64 @@ export default function AllPartis() {
 
         {/* Grid of parti cards */}
         <div className="parti-grid">
-          {finalPartis.map((parti, index) => (
-            <div
-              className="parti-card"
-              key={index}
-              onClick={() => {
-                if (parti.chatRoomName) {
-                  navigate("/chat", {
-                    state: { chatRoomName: parti.chatRoomName },
-                  });
-                }
-              }}
-              style={{ cursor: parti.chatRoomName ? "pointer" : "default" }}
-            >
-              {/* Game image */}
-              {parti.selectedGame && (
-                <img
-                src={parti.selectedGame.image}
-                alt={parti.selectedGame.name}
-                className="parti-image"
-              />
-              
-              )}
-
-              <div className="parti-card-content">
-                <h3>
-                  {parti.visibleName ||
-                    parti.selectedGame.name ||
-                    "Unknown Game"}
-                </h3>
-
-                <p>
-                  <strong>Host:</strong> {parti.hostUsername}
-                </p>
-
-                {parti.chatRoomName && (
+          {Array.isArray(partis) &&
+            partis.map((parti, index) => (
+              <div 
+                className="parti-card" 
+                key={index}
+                onClick={() => {
+                  if (parti.chatRoomName) {
+                    navigate('/chat', { 
+                      state: { 
+                        chatRoomName: parti.chatRoomName,
+                        partiVisibleName: parti.visibleName || parti.selectedGame?.name || 'Parti Chat'
+                      } 
+                    });
+                  }
+                }}
+                style={{ cursor: parti.chatRoomName ? 'pointer' : 'default' }}
+              >
+                {parti.selectedGame?.image && (
+                  <img
+                    src={parti.selectedGame.image}
+                    alt={parti.selectedGame.name}
+                    className="parti-image"
+                  />
+                )}
+                <div className="parti-card-content">
+                  <h3>{parti.visibleName || parti.selectedGame?.name}</h3>
                   <p>
-                    <strong>Chatroom ID:</strong> {parti.chatRoomName}
+                    <strong>Host:</strong> {parti.hostUsername}
                   </p>
-                )}
-
-                <p>
-                  <strong>Languages:</strong>{" "}
-                  {parti.selectedLanguages?.join(", ")}
-                </p>
-
-                <p className="tags">
-                  {parti.selectedTags?.map((tag, i) => (
-                    <span key={i}>{tag}</span>
-                  ))}
-                </p>
-
-                <p className="time-range">
-                  {parti.timeRange
-                    ? parti.timeRange.startDate === "Any"
-                      ? "Any Time"
-                      : `${parti.timeRange.startDate} ${parti.timeRange.startTime} - ${parti.timeRange.endDate} ${parti.timeRange.endTime}`
-                    : "No time selected"}
-                </p>
-
-                {parti.chatRoomName && (
-                  <p
-                    style={{
-                      marginTop: "10px",
-                      color: "#9ed6b9",
-                      fontSize: "14px",
-                    }}
-                  >
-                    Click to join chat room
+                  {parti.chatRoomName && (
+                    <p>
+                      <strong>Chatroom ID:</strong> {parti.chatRoomName}
+                    </p>
+                  )}
+                  <p>
+                    <strong>Languages:</strong>{" "}
+                    {parti.selectedLanguages?.join(", ")}
                   </p>
-                )}
+                  <p className="tags">
+                    {parti.selectedTags?.map((tag, i) => (
+                      <span key={i}>{tag}</span>
+                    ))}
+                  </p>
+                  <p className="time-range">
+                    {parti.timeRange
+                      ? (parti.timeRange.startDate === "Any"
+                          ? "Any Time"
+                          : `${parti.timeRange.startDate} ${parti.timeRange.startTime} - ${parti.timeRange.endDate} ${parti.timeRange.endTime}`)
+                      : "No time selected"}
+                  </p>
+                  {parti.chatRoomName && (
+                    <p style={{ marginTop: '10px', color: '#9ed6b9', fontSize: '14px' }}>
+                      Click to join chat room
+                    </p>
+                  )}
+                </div>
               </div>
-            </div>
-          ))}
+            ))}
         </div>
       </div>
     </div>

@@ -7,54 +7,27 @@ export default function SelectTags() {
   const location = useLocation();
   const { selectedGame, selectedLanguages } = location.state || {};
 
-  const popularTags = [
-    "Chill", "Fun", "Ranked", "Casual", "Competitive",
-    "Co-op", "Solo", "Party", "Challenge", "Relax",
-    "Beginner-Friendly",
-    "Tryhard",
-    "No-Mic",
-    "Mic-Only",
-    "Late-Night",
-    "Friendly",
-    "Toxic-Free",
-    "Pro",
-    "Warmup",
-    "Strategy",
-    "Fast-Paced",
-    "Slow-Paced",
-    "Learning",
-    "Speedrun",
-    "Just Vibes",
-    "Tilt-Proof",
-    "Coach Needed",
-    "Looking for Team",
-    "Event",
-    "Duo",
-    "Trio",
-    "Squad",
-    "High-Energy",
-    "Low-Energy",
-    "No-Sweat",
-    "Sweaty",
-    "Tryouts",
-    "AFK-Friendly",
-    "Story Mode",
-    "Grind",
-    "Loot",
-    "Questing",
-    "Practice",
-    "Streaming",
-  ];
-  
+  const tagCategories = {
+    Vibe: ["Chill", "Fun", "Relax", "Just Vibes", "Friendly", "Toxic-Free", "Low-Energy", "No-Sweat", "Tilt-Proof", "Warmup"],
+    Competitive: ["Ranked", "Casual", "Competitive", "Tryhard", "Pro", "Sweaty", "Tryouts", "High-Energy"],
+    Group: ["Co-op", "Party", "Challenge", "Looking for Team", "Event", "Duo", "Trio", "Squad"],
+    Playstyle: ["Solo", "Strategy", "Fast-Paced", "Slow-Paced", "Learning", "Story Mode", "Practice"],
+    Logistics: ["Beginner-Friendly", "No-Mic", "Mic-Only", "Late-Night", "Coach Needed", "AFK-Friendly", "Streaming"],
+    Objectives: ["Speedrun", "Grind", "Loot", "Questing"]
+  };
 
   const [searchQuery, setSearchQuery] = useState("");
   const [customTag, setCustomTag] = useState("");
 
   const [selectedTags, setSelectedTags] = useState([]);
 
-  const filteredTags = popularTags.filter(tag =>
-    tag.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  const filteredTags = Object.entries(tagCategories).reduce((acc, [group, tags]) => {
+    const matches = tags.filter(tag =>
+      tag.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+    if (matches.length) acc.push({ group, tags: matches });
+    return acc;
+  }, []);
 
   const toggleTag = (tag) => {
     setSelectedTags(prev => prev.includes(tag)
@@ -88,7 +61,14 @@ export default function SelectTags() {
 
       {/* Main content */}
       <div className="select-tags-content">
-        <h1 className="create-title">Step 3: Choose your tags</h1>
+        <header className="step-hero">
+          <h1 className="create-title">
+            <span className="step-prefix">Step 3:</span> Choose your tags
+          </h1>
+          <p className="sub-text">
+            Describe the vibe, skill, and goals of your Parti so the right players find you instantly.
+          </p>
+        </header>
 
         {/* Show selected game & languages */}
         <div className="selected-game-label">
@@ -113,19 +93,26 @@ export default function SelectTags() {
           placeholder="Search tags..."
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
-          className="language-search"
+          className="tag-search"
         />
 
         {/* Tags grid */}
-        <div className="language-list">
-          {filteredTags.map(tag => (
-            <div
-              key={tag}
-              className={`tag-card ${selectedTags.includes(tag) ? "selected" : ""}`}
-              onClick={() => toggleTag(tag)}
-            >
-              {tag}
-            </div>
+        <div className="tags-grid">
+          {filteredTags.map(({ group, tags }) => (
+            <section key={group} className="tag-section">
+              <h3>{group}</h3>
+              <div className="tag-list">
+                {tags.map(tag => (
+                  <button
+                    key={tag}
+                    className={`tag-card ${selectedTags.includes(tag) ? "selected" : ""}`}
+                    onClick={() => toggleTag(tag)}
+                  >
+                    {tag}
+                  </button>
+                ))}
+              </div>
+            </section>
           ))}
         </div>
 
