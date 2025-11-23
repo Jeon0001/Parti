@@ -371,14 +371,17 @@ export default function Chat() {
     e.preventDefault();
     if (!messageInput.trim()) return;
 
+    const messageToSend = messageInput.trim();
+    setMessageInput(''); // Clear input immediately for better UX
+
     socket.emit('message', {
       callId,
       username,
-      message: messageInput
+      message: messageToSend
     });
 
-    addMessage(username, messageInput);
-    setMessageInput('');
+    // Don't add message locally - wait for server broadcast
+    // This prevents duplicate messages
   };
 
   if (!username) {
