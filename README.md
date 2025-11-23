@@ -1,7 +1,9 @@
 # Parti
 
 ## Prerequisites
+
 - Put this inside top of package.json
+
 ```
 {
   "name": "login",
@@ -10,5 +12,8 @@
   ...
 }
 ```
+
+Afridi is kinda cute
+
 - npm install, inside the login folder
 - npm install within login/client
