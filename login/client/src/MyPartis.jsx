@@ -238,9 +238,11 @@ export default function MyPartis() {
                           <span key={i}>{tag}</span>
                         ))}
                       </p>
-                      <p className="time-range">
-                        {parti.timeRange.startDate} {parti.timeRange.startTime} - {parti.timeRange.endDate} {parti.timeRange.endTime}
-                      </p>
+                  <p className="time-range">
+                    {parti.timeRange?.startDate === "Any" 
+                      ? "Any Time" 
+                      : `${parti.timeRange.startDate} ${parti.timeRange.startTime} - ${parti.timeRange.endDate} ${parti.timeRange.endTime}`}
+                  </p>
                       {parti.chatRoomName && (
                         <p style={{ marginTop: '10px', color: '#9ed6b9', fontSize: '14px' }}>
                           Click to join chat room

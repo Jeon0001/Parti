@@ -100,7 +100,9 @@ export default function AllPartis() {
                   </p>
                   <p className="time-range">
                     {parti.timeRange
-                      ? `${parti.timeRange.startDate} ${parti.timeRange.startTime} - ${parti.timeRange.endDate} ${parti.timeRange.endTime}`
+                      ? (parti.timeRange.startDate === "Any"
+                          ? "Any Time"
+                          : `${parti.timeRange.startDate} ${parti.timeRange.startTime} - ${parti.timeRange.endDate} ${parti.timeRange.endTime}`)
                       : "No time selected"}
                   </p>
                   {parti.chatRoomName && (
