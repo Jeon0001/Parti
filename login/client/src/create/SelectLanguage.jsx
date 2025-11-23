@@ -51,7 +51,14 @@ export default function SelectLanguage() {
 
       {/* Main content */}
       <div className="language-content">
-        <h1 className="create-title">Step 2: Choose your languages</h1>
+        <header className="step-hero">
+          <h1 className="create-title">
+            <span className="step-prefix">Step 2:</span> Choose your languages
+          </h1>
+          <p className="sub-text">
+            Match players by the way they communicate best. Pick every language that fits.
+          </p>
+        </header>
 
         {/* Search bar */}
         <input

@@ -6,13 +6,18 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  padding-top: 140px;
   }
 
   .select-tags-content {
-    max-width: 800px;
+    width: 100%;
+    max-width: none;
     margin: 0 auto;
     padding: 20px;
     text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
   }
   
   .selected-info {
@@ -20,48 +25,101 @@
     font-size: 18px;
   }
 
+  .step-hero {
+    max-width: 720px;
+    margin: 0 auto 40px;
+  }
+
+  .step-label {
+    text-transform: uppercase;
+    letter-spacing: 0.4em;
+    font-size: 12px;
+    color: #92eabb;
+    margin-bottom: 12px;
+  }
+  
   .create-title {
-    margin-top: 160px;
-    font-size: 48px;
-    font-weight: 700;
-    margin-bottom: 60px;
-    text-align: center;
+    font-size: clamp(2.5rem, 4vw, 3.4rem);
+    margin: 0 0 12px;
+  }
+
+  .sub-text {
+    color: #9ed6b9;
+    font-size: 16px;
+    margin: 0;
+  }
+
+  .step-prefix {
+    color: #92eabb;
+    text-transform: uppercase;
+    letter-spacing: 0.25em;
+    font-size: 0.45em;
+    margin-right: 12px;
   }
   
   .tag-search {
     width: 100%;
-    max-width: 400px;
+    max-width: 600px;
     margin: 0 auto 20px auto;
     display: block;
-    padding: 12px 14px;
-    border-radius: 10px;
+    padding: 14px 18px;
+    border-radius: 16px;
     border: 3px solid transparent;
     background: linear-gradient(#222, #222) padding-box,
                 linear-gradient(135deg, #306844, #1E453E, #182C25) border-box;
     background-clip: padding-box, border-box;
     color: white;
-    font-size: 16px;
+    font-size: 18px;
   }
   
   /* Tag grid */
 .tags-grid {
     display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    justify-content: center;
-    margin-bottom: 40px;
+    flex-wrap: nowrap;
+    gap: 18px;
+    margin: 0 auto 40px auto;
+    overflow-x: auto;
+    padding-bottom: 10px;
+    max-width: none;
+    
+  }
+
+.tag-section {
+    background: rgba(0,0,0,0.25);
+    border-radius: 20px;
+    padding: 20px 24px;
+    border: 1px solid rgba(255,255,255,0.12);
+    min-width: 260px;
+    flex: 0 0 auto;
+  }
+
+  .tag-section h3 {
+    margin-top: 0;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    font-size: 14px;
+    color: #8fd5a7;
+  }
+
+  .tag-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    align-items: stretch;
   }
   
   /* Individual tag card */
   .tag-card {
-    padding: 6px 12px;
-    border-radius: 20px;
-    font-size: 14px;
+    padding: 20px;
+    min-width: 160px;
+    border-radius: 16px;
+    font-size: 17px;
     cursor: pointer;
-    background: rgba(0,0,0,0.5);
+    background: rgba(0,0,0,0.25);
     color: white;
-    transition: background 0.25s ease, transform 0.2s ease;
-    display: inline-block;
+    transition: transform 0.2s ease, background 0.2s ease, border 0.2s ease;
+    border: 2px solid transparent;
+    text-align: center;
   }
   
   .tag-card:hover {
@@ -70,8 +128,8 @@
   }
   
   .tag-card.selected {
-    background: #49a37b;
-    color: white;
+    border: 2px solid #49a37b;
+    background: #2a4a3f;
   }
 
   /* Custom Tag Section lmaoo */
