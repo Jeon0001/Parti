@@ -67,7 +67,7 @@ export default function SelectTags() {
     // console.log("Selected Game:", selectedGame);
     // console.log("Selected Languages:", selectedLanguages);
     // console.log("Selected Tags:", selectedTags);
-    navigate("/selecttime", { state: { selectedGame, selectedLanguages, selectedTags } });
+    navigate("/create/selecttime", { state: { selectedGame, selectedLanguages, selectedTags } });
   };
 
   return (

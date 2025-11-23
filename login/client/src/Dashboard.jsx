@@ -154,7 +154,7 @@ export default function Dashboard() {
               >
                 Find a Parti
               </button>
-              <button className="ghost-btn" onClick={() => navigate("/chat")}>
+              <button className="ghost-btn" onClick={() => navigate("/allpartis")}>
                 See all Partis
               </button>
             </div>
@@ -209,7 +209,7 @@ export default function Dashboard() {
                   <option value="This Weekend">This Weekend</option>
                 </select>
               </label>
-              <button type="submit" className="primary-btn lookup-submit">
+              <button type="submit" className="primary-btn lookup-submit" onClick={() => navigate("/allpartis")}>
                 Search
               </button>
             </div>
@@ -237,7 +237,7 @@ export default function Dashboard() {
         <section className="popular-section">
           <div className="popular-header">
             <h2>Popular Games</h2>
-            <button className="ghost-btn" onClick={() => navigate("/findpartis")}>
+            <button className="ghost-btn" onClick={() => navigate("/allpartis")}>
               See More
             </button>
           </div>

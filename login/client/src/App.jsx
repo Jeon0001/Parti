@@ -5,11 +5,13 @@ import Register from "./Register";
 import Dashboard from "./Dashboard";
 import MyPartis from "./MyPartis"
 import CreateParti from "./create/CreateParti";
-import SelectLanguage from "./create/SelectLanguage"
-import SelectTags from "./create/SelectTags"
-import SelectTime from "./create/SelectTime"
-import Finalize from "./create/Finalize"
+import FindParti from "./find/FindParti";
+import CreateSelectLanguage from "./create/SelectLanguage"
+import CreateSelectTags from "./create/SelectTags"
+import CreateSelectTime from "./create/SelectTime"
+import CreateFinalize from "./create/Finalize"
 import Chat from "./chat/Chat"
+import AllPartis from "./find/AllPartis";
 
 
 
@@ -22,10 +24,12 @@ export default function App() {
         <Route path="/register" element={<Register />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/createparti" element={<CreateParti />} />
-        <Route path="/selectlanguage" element={<SelectLanguage />} />
-        <Route path="/selecttags" element={<SelectTags />} />
-        <Route path="/selecttime" element={<SelectTime />} />
-        <Route path="/finalize" element={<Finalize />} />
+        <Route path="/findpartis" element={<FindParti />} />
+        <Route path="/create/selectlanguage" element={<CreateSelectLanguage />} />
+        <Route path="/create/selecttags" element={<CreateSelectTags />} />
+        <Route path="/create/selecttime" element={<CreateSelectTime />} />
+        <Route path="/create/finalize" element={<CreateFinalize />} />
+        <Route path="/allpartis" element={<AllPartis />} />
         <Route path="/mypartis" element={<MyPartis />} />
         <Route path="/chat" element={<Chat />} />
       </Routes>

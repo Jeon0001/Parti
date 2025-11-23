@@ -17,7 +17,7 @@ export default function SelectTime() {
   });
 
   const handleNext = () => {
-    navigate("/finalize", {
+    navigate("/create/finalize", {
       state: {
         selectedGame,
         selectedLanguages,

@@ -1,0 +1,81 @@
+.allpartis-title {
+    text-align: center;
+    margin-top: 30px;
+    font-size: 32px;
+    font-weight: 600;
+  }
+  
+  /* ---------- Grid Layout ---------- */
+  .allpartis-grid {
+    margin-top: 30px;
+    padding: 0 40px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+    grid-gap: 25px;
+  }
+  
+  /* ---------- Parti Card ---------- */
+  .parti-card {
+    background: rgba(30, 30, 30, 0.9);
+    padding: 15px;
+    border-radius: 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: 0.25s;
+    border: 1px solid #2a2a2a;
+  }
+  
+  .parti-card:hover {
+    transform: translateY(-5px);
+    border: 1px solid #c96aff;
+    box-shadow: 0 0 12px rgba(201, 106, 255, 0.4);
+  }
+  
+  /* ---------- Game Image ---------- */
+  .parti-image {
+    width: 100%;
+    aspect-ratio: 1 / 1; /* Makes it a perfect square */
+    object-fit: cover;
+    border-radius: 15px;
+    margin-bottom: 12px;
+  }
+  
+  /* ---------- Text ---------- */
+  .parti-name {
+    font-size: 20px;
+    font-weight: 600;
+    margin: 5px 0;
+    text-align: center;
+  }
+  
+  .parti-host {
+    font-size: 14px;
+    opacity: 0.7;
+    margin-bottom: 10px;
+  }
+  
+  /* ---------- Tags ---------- */
+  .parti-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    justify-content: center;
+    margin: 10px 0;
+  }
+  
+  .parti-tags span {
+    padding: 4px 10px;
+    background: #c96aff33;
+    border: 1px solid #c96aff;
+    border-radius: 12px;
+    font-size: 12px;
+  }
+  
+  /* ---------- Time Range ---------- */
+  .parti-time {
+    font-size: 13px;
+    margin-top: 8px;
+    opacity: 0.8;
+    text-align: center;
+  }

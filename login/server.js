@@ -16,15 +16,19 @@ const io = new Server(httpServer, {
 
 const PORT = 3000;
 
-// In-memory user storage (replace with DB for production)
-const users = []; // { email, password }
+// -------------------- In-memory storage --------------------
+const users = []; // { username, email, password }
 
-const partis = []; 
-// Each parti object will be:
-// { hostUsername, selectedGame, selectedLanguages, selectedTags, timeRange }
+// OLD:
+// const partis = [];
 
+// NEW:
+const allPartis = [];         // all partis created by everyone
+const userPartis = {};        // key=username → array of partis
+
+// -------------------- Middleware --------------------
 app.use(cors({
-  origin: "http://localhost:5173", // your React dev server
+  origin: "http://localhost:5173",
   credentials: true
 }));
 
@@ -34,195 +38,174 @@ app.use(session({
   secret: "secret-key",
   resave: false,
   saveUninitialized: true,
-  cookie: { secure: false } // secure:true if using HTTPS
+  cookie: { secure: false }
 }));
 
-// -------- Register endpoint --------
+// -------------------- Register --------------------
 app.post("/api/register", (req, res) => {
   const { username, email, password } = req.body;
 
-  // Check if the user already exists
-  const existingUser = users.find(u => u.email === email);
-  if (existingUser) {
+  const existing = users.find(u => u.email === email);
+  if (existing)
     return res.json({ success: false, message: "Email already registered" });
-  }
 
-  // Store user in memory
   users.push({ username, email, password });
-
   res.json({ success: true, message: "Account registered successfully" });
 });
 
-// // -------- Login endpoint --------
-// app.post("/api/register", (req, res) => {
-//   const { username, email, password } = req.body;
-
-//   // Check if username already exists
-//   const existingUsername = users.find(u => u.username === username);
-//   if (existingUsername) {
-//     return res.json({ success: false, message: "Username is taken" });
-//   }
-
-//   // Check if email already exists
-//   const existingUser = users.find(u => u.email === email);
-//   if (existingUser) {
-//     return res.json({ success: false, message: "Email already registered" });
-//   }
-
-//   // Save user
-//   users.push({ username, email, password });
-//   res.json({ success: true, message: "Account registered successfully" });
-// });
-
-// Login endpoint
+// -------------------- Login --------------------
 app.post("/api/login", (req, res) => {
-  const { username, email, password } = req.body;
+  const { email, password } = req.body;
 
   const user = users.find(u => u.email === email && u.password === password);
-  if (!user) return res.json({ success: false, message: "Incorrect email or password" });
+  if (!user)
+    return res.json({ success: false, message: "Incorrect email or password" });
 
   req.session.user = { username: user.username, email: user.email };
   res.json({ success: true });
 });
 
-// Dashboard endpoint
+// -------------------- Dashboard --------------------
 app.get("/api/dashboard", (req, res) => {
-  if (!req.session.user) return res.status(401).json({ success: false, message: "Not logged in" });
+  if (!req.session.user)
+    return res.status(401).json({ success: false, message: "Not logged in" });
 
   res.json({ success: true, data: req.session.user });
 });
 
-// Store active calls and participants
-const activeCalls = new Map(); // callId -> Set of socketIds
+// -------------------- WebRTC Logic (unchanged) --------------------
+const activeCalls = new Map();
 
-// Socket.io connection handling
-io.on('connection', (socket) => {
-  console.log('User connected:', socket.id);
+io.on("connection", (socket) => {
+  console.log("User connected:", socket.id);
 
-  socket.on('join-call', ({ callId, username }) => {
+  socket.on("join-call", ({ callId, username }) => {
     socket.join(callId);
-    
+
     if (!activeCalls.has(callId)) {
       activeCalls.set(callId, new Set());
     }
     activeCalls.get(callId).add(socket.id);
 
     const participants = Array.from(activeCalls.get(callId));
-    const participantCount = participants.length;
 
-    // Notify others in the call
-    socket.to(callId).emit('user-joined', {
+    socket.to(callId).emit("user-joined", {
       username,
-      participants: participantCount,
+      participants: participants.length,
       socketId: socket.id
     });
 
-    // Send list of existing participants to the new user
     const otherParticipants = participants.filter(id => id !== socket.id);
     if (otherParticipants.length > 0) {
-      socket.emit('existing-participants', {
+      socket.emit("existing-participants", {
         participants: otherParticipants
       });
     }
-
-    console.log(`User ${username} joined call ${callId}`);
   });
 
-  socket.on('leave-call', ({ callId, username }) => {
+  socket.on("leave-call", ({ callId, username }) => {
     socket.leave(callId);
-    
+
     if (activeCalls.has(callId)) {
       activeCalls.get(callId).delete(socket.id);
       if (activeCalls.get(callId).size === 0) {
         activeCalls.delete(callId);
       } else {
         const participants = Array.from(activeCalls.get(callId));
-        socket.to(callId).emit('user-left', {
+        socket.to(callId).emit("user-left", {
           username,
           participants: participants.length
         });
       }
     }
-
-    console.log(`User ${username} left call ${callId}`);
   });
 
-  socket.on('offer', ({ callId, offer, to }) => {
-    socket.to(to).emit('offer', {
-      offer,
-      from: socket.id
-    });
+  socket.on("offer", ({ offer, to }) => {
+    socket.to(to).emit("offer", { offer, from: socket.id });
   });
 
-  socket.on('answer', ({ callId, answer, to }) => {
-    socket.to(to).emit('answer', {
-      answer,
-      from: socket.id
-    });
+  socket.on("answer", ({ answer, to }) => {
+    socket.to(to).emit("answer", { answer, from: socket.id });
   });
 
-  socket.on('ice-candidate', ({ callId, candidate }) => {
-    socket.to(callId).emit('ice-candidate', {
-      candidate,
-      from: socket.id
-    });
+  socket.on("ice-candidate", ({ callId, candidate }) => {
+    socket.to(callId).emit("ice-candidate", { candidate, from: socket.id });
   });
 
-  socket.on('message', ({ callId, username, message }) => {
-    io.to(callId).emit('message', {
+  socket.on("message", ({ callId, username, message }) => {
+    io.to(callId).emit("message", {
       username,
       message,
       timestamp: new Date()
     });
   });
 
-  socket.on('disconnect', () => {
-    console.log('User disconnected:', socket.id);
-    // Clean up from all calls
+  socket.on("disconnect", () => {
+    console.log("User disconnected:", socket.id);
     for (const [callId, participants] of activeCalls.entries()) {
       if (participants.has(socket.id)) {
         participants.delete(socket.id);
         if (participants.size === 0) {
           activeCalls.delete(callId);
-        } else {
-          socket.to(callId).emit('user-left', {
-            username: 'Unknown',
-            participants: participants.size
-          });
         }
       }
     }
   });
 });
 
-// -------------------- Parti endpoints --------------------
-
-// Create a parti
+// -------------------- Parti Endpoints --------------------
 app.post("/api/create-parti", (req, res) => {
-  if (!req.session.user) return res.status(401).json({ success: false, message: "Not logged in" });
+  if (!req.session.user)
+    return res.status(401).json({ success: false, message: "Not logged in" });
 
   const { selectedGame, selectedLanguages, selectedTags, timeRange } = req.body;
   const hostUsername = req.session.user.username;
 
-  partis.push({
+  const parti = {
+    id: Date.now(),
     hostUsername,
     selectedGame,
     selectedLanguages,
     selectedTags,
-    timeRange
-  });
+    timeRange,
+    createdAt: new Date()
+  };
 
-  res.json({ success: true, message: "Parti created successfully" });
+  // Save to ALL PARTIS
+  allPartis.push(parti);
+
+  // Save to USER PARTIS
+  if (!userPartis[hostUsername]) {
+    userPartis[hostUsername] = [];
+  }
+  userPartis[hostUsername].push(parti);
+
+  res.json({ success: true, message: "Parti created successfully", parti });
 });
 
-// Get partis of logged-in user
+// Get partis for logged-in user
 app.get("/api/my-partis", (req, res) => {
-  if (!req.session.user) return res.status(401).json({ success: false, message: "Not logged in" });
+  if (!req.session.user)
+    return res.status(401).json({ success: false, message: "Not logged in" });
 
-  const hostUsername = req.session.user.username;
-  const myPartis = partis.filter(p => p.hostUsername === hostUsername);
-
-  res.json({ success: true, partis: myPartis });
+  const username = req.session.user.username;
+  res.json({
+    success: true,
+    partis: userPartis[username] || []
+  });
 });
 
-httpServer.listen(PORT, () => console.log(`Server running at http://localhost:${PORT}`));
+// NEW: Get ALL partis
+app.get("/api/all-partis", (req, res) => {
+  res.json({
+    success: true,
+    partis: allPartis
+  });
+});
+
+
+
+// -------------------- Start Server --------------------
+httpServer.listen(PORT, () =>
+  console.log(`Server running at http://localhost:${PORT}`)
+);

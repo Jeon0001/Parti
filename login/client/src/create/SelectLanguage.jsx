@@ -91,7 +91,7 @@ export default function SelectLanguage() {
         <button
   className="next-btn"
   disabled={selectedLanguages.length === 0}
-  onClick={() => navigate("/selecttags", { state: { selectedGame, selectedLanguages } })}
+  onClick={() => navigate("/create/selecttags", { state: { selectedGame, selectedLanguages } })}
 >
   Next
 </button>

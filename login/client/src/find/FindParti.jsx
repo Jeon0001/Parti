@@ -1,44 +1,41 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import "./CreateParti.css";
+import "./FindParti.css";
 import { popularGames } from "../data/options";
 
-export default function CreateParti() {
+export default function FindParti() {
   const [searchQuery, setSearchQuery] = useState("");
-  const [selectedGame, setSelectedGame] = useState(null);
 
-  const handleSelect = (game) => {
-    setSelectedGame(prev => prev?.name === game.name ? null : game);
+  // Store selected games as a dictionary
+  const [selectedGames, setSelectedGames] = useState({});
+
+  const toggleGame = (game) => {
+    setSelectedGames((prev) => {
+      const copy = { ...prev };
+
+      if (copy[game.name]) {
+        delete copy[game.name]; // remove game
+      } else {
+        copy[game.name] = game; // add game
+      }
+
+      return copy;
+    });
   };
 
   const navigate = useNavigate();
+
   const handleNext = () => {
-    if (!selectedGame) return;
-    navigate("/create/selectlanguage", { state: { selectedGame } });
+    if (Object.keys(selectedGames).length === 0) return;
+    navigate("/find/selectlanguage", { state: { selectedGames } });
   };
 
-  const filteredGames = popularGames.filter(game =>
+  const filteredGames = popularGames.filter((game) =>
     game.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   return (
     <div className="create-page">
-
-      {/* Video background (only if wallpaper exists) */}
-      {selectedGame?.wallpaper && (
-    <>
-      <video
-        className="wallpaper-video"
-        autoPlay
-        loop
-        muted
-        src={selectedGame.wallpaper}
-        type="video/mp4"
-      />
-      {/* Dim overlay */}
-      <div className="video-overlay"></div>
-    </>
-  )}
 
       {/* Top Navigation Bar */}
       <nav className="dashboard-topbar">
@@ -57,7 +54,7 @@ export default function CreateParti() {
 
       {/* Main Content */}
       <div className="create-content">
-        <h1 className="create-title">Step 1: Choose a game</h1>
+        <h1 className="create-title">Step 1: Select your games</h1>
 
         <input
           type="text"
@@ -68,23 +65,35 @@ export default function CreateParti() {
         />
 
         <div className="games-grid">
-          {filteredGames.map((game, index) => (
-            <div
-              key={index}
-              className={`game-card ${selectedGame?.name === game.name ? "selected" : ""}`}
-              onClick={() => handleSelect(game)}
-            >
-              <img src={game.image} alt={game.name} className="game-image" />
-              <p>{game.name}</p>
-            </div>
-          ))}
+          {filteredGames.map((game) => {
+            const isSelected = !!selectedGames[game.name];
+
+            return (
+              <div
+                key={game.name}
+                className={`game-card ${isSelected ? "selected" : ""}`}
+                onClick={() => toggleGame(game)}
+              >
+                <img src={game.image} alt={game.name} className="game-image" />
+                <p>{game.name}</p>
+              </div>
+            );
+          })}
         </div>
       </div>
 
+      {/* Navigation Buttons */}
       <div className="back-next-container">
         <button className="back-btn" onClick={() => navigate(-1)}>Back</button>
-        <button className="next-btn" disabled={!selectedGame} onClick={handleNext}>Next</button>
+        <button
+          className="next-btn"
+          disabled={Object.keys(selectedGames).length === 0}
+          onClick={handleNext}
+        >
+          Next
+        </button>
       </div>
+
     </div>
   );
 }
