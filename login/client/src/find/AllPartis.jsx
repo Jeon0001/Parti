@@ -61,23 +61,39 @@ export default function AllPartis() {
     }
 
     // // 3. Tags filter
-    // if (filters.selectedTags?.length > 0) {
-    //   if (!filters.selectedTags.some((tag) => parti.selectedTags?.includes(tag))) return false;
-    // }
+    if (filters.selectedTags?.length > 0) {
+        // If parti has no tags, consider it as "any" (passes the filter)
+        if (parti.selectedTags?.length > 0) {
+          if (!filters.selectedTags.some((tag) => parti.selectedTags.includes(tag))) return false;
+        }
+        // else: parti has no tags → passes automatically
+      }
+      
 
     // 4. Time range filter
-    // if (filters.timeRange && parti.timeRange) {
-    //     const filterStart = new Date(`${filters.timeRange.startDate}T${filters.timeRange.startTime}`);
-    //     const filterEnd = new Date(`${filters.timeRange.endDate}T${filters.timeRange.endTime}`);
+    if (filters.timeRange && parti.timeRange) {
+        // If either filter or parti has "Any" time, pass automatically
+        if (
+          filters.timeRange.startDate === "Any" ||
+          filters.timeRange.endDate === "Any" ||
+          parti.timeRange.startDate === "Any" ||
+          parti.timeRange.endDate === "Any"
+        ) {
+          // pass through
+        } else {
+          const filterStart = new Date(`${filters.timeRange.startDate}T${filters.timeRange.startTime}`);
+          const filterEnd = new Date(`${filters.timeRange.endDate}T${filters.timeRange.endTime}`);
       
-    //     const partiStart = new Date(`${parti.timeRange.startDate}T${parti.timeRange.startTime}`);
-    //     const partiEnd = new Date(`${parti.timeRange.endDate}T${parti.timeRange.endTime}`);
+          const partiStart = new Date(`${parti.timeRange.startDate}T${parti.timeRange.startTime}`);
+          const partiEnd = new Date(`${parti.timeRange.endDate}T${parti.timeRange.endTime}`);
       
-    //     // Check if filter range is fully within the parti's range
-    //     if (filterStart > partiStart || filterEnd < partiEnd) {
-    //       return false;
-    //     }
-    //   }
+          // Filter range must be fully inside the parti range
+          if (filterStart < partiStart || filterEnd > partiEnd) {
+            return false;
+          }
+        }
+      }
+      
       
 
     return true;
@@ -87,94 +103,110 @@ export default function AllPartis() {
   const finalPartis =
     Object.keys(filters).length === 0 ? partis : filteredPartis;
 
-  return (
-    <div className="allpartis-page">
-      {/* Topbar */}
-      <nav className="dashboard-topbar">
-        <div className="dashboard-logo">Parti</div>
-        <div className="dashboard-buttons">
-          <button onClick={() => navigate("/dashboard")}>Home</button>
-          <button onClick={() => navigate("/mypartis")}>My Partis</button>
-          <button onClick={() => navigate("/findpartis")}>Find Partis</button>
-          <button onClick={() => navigate("/createparti")}>Create Parti</button>
-          <div className="account-bar">
-            <button onClick={() => navigate("/login")}>Logout</button>
-          </div>
-        </div>
-      </nav>
-
-      <div className="allpartis-content">
-        <h1 className="create-title">Partis for you</h1>
-
-        {loading && <p>Loading...</p>}
-        {error && <p style={{ color: "red" }}>{error}</p>}
-
-        {!loading && finalPartis.length === 0 && (
-          <div className="no-partis">No partis match your filters.</div>
-        )}
-
-        {/* Grid of parti cards */}
-        <div className="parti-grid">
-          {Array.isArray(partis) &&
-            partis.map((parti, index) => (
-              <div 
-                className="parti-card" 
-                key={index}
-                onClick={() => {
-                  if (parti.chatRoomName) {
-                    navigate('/chat', { 
-                      state: { 
-                        chatRoomName: parti.chatRoomName,
-                        partiVisibleName: parti.visibleName || parti.selectedGame?.name || 'Parti Chat'
-                      } 
-                    });
-                  }
-                }}
-                style={{ cursor: parti.chatRoomName ? 'pointer' : 'default' }}
-              >
-                {parti.selectedGame?.image && (
-                  <img
+    return (
+        <div className="allpartis-page">
+          {/* Topbar */}
+          <nav className="dashboard-topbar">
+            <div className="dashboard-logo">Parti</div>
+            <div className="dashboard-buttons">
+              <button onClick={() => navigate("/dashboard")}>Home</button>
+              <button onClick={() => navigate("/mypartis")}>My Partis</button>
+              <button onClick={() => navigate("/findpartis")}>Find Partis</button>
+              <button onClick={() => navigate("/createparti")}>Create Parti</button>
+              <div className="account-bar">
+                <button onClick={() => navigate("/login")}>Logout</button>
+              </div>
+            </div>
+          </nav>
+    
+          <div className="allpartis-content">
+            <h1 className="create-title">Partis for you</h1>
+    
+            {loading && <p>Loading...</p>}
+            {error && <p style={{ color: "red" }}>{error}</p>}
+    
+            {!loading && finalPartis.length === 0 && (
+              <div className="no-partis">No partis match your filters.</div>
+            )}
+    
+            {/* Grid of parti cards */}
+            <div className="parti-grid">
+              {finalPartis.map((parti, index) => (
+                <div
+                  className="parti-card"
+                  key={index}
+                  onClick={() => {
+                    if (parti.chatRoomName) {
+                      navigate("/chat", {
+                        state: { chatRoomName: parti.chatRoomName },
+                      });
+                    }
+                  }}
+                  style={{ cursor: parti.chatRoomName ? "pointer" : "default" }}
+                >
+                  {/* Game image */}
+                  {parti.selectedGame && (
+                    <img
                     src={parti.selectedGame.image}
                     alt={parti.selectedGame.name}
                     className="parti-image"
                   />
-                )}
-                <div className="parti-card-content">
-                  <h3>{parti.visibleName || parti.selectedGame?.name}</h3>
-                  <p>
-                    <strong>Host:</strong> {parti.hostUsername}
-                  </p>
-                  {parti.chatRoomName && (
+                  
+                  )}
+    
+                  <div className="parti-card-content">
+                    <h3>
+                      {parti.visibleName ||
+                        parti.selectedGame.name ||
+                        "Unknown Game"}
+                    </h3>
+    
                     <p>
-                      <strong>Chatroom ID:</strong> {parti.chatRoomName}
+                      <strong>Host:</strong> {parti.hostUsername}
                     </p>
-                  )}
-                  <p>
-                    <strong>Languages:</strong>{" "}
-                    {parti.selectedLanguages?.join(", ")}
-                  </p>
-                  <p className="tags">
-                    {parti.selectedTags?.map((tag, i) => (
-                      <span key={i}>{tag}</span>
-                    ))}
-                  </p>
-                  <p className="time-range">
-                    {parti.timeRange
-                      ? (parti.timeRange.startDate === "Any"
-                          ? "Any Time"
-                          : `${parti.timeRange.startDate} ${parti.timeRange.startTime} - ${parti.timeRange.endDate} ${parti.timeRange.endTime}`)
-                      : "No time selected"}
-                  </p>
-                  {parti.chatRoomName && (
-                    <p style={{ marginTop: '10px', color: '#9ed6b9', fontSize: '14px' }}>
-                      Click to join chat room
+    
+                    {parti.chatRoomName && (
+                      <p>
+                        <strong>Chatroom ID:</strong> {parti.chatRoomName}
+                      </p>
+                    )}
+    
+                    <p>
+                      <strong>Languages:</strong>{" "}
+                      {parti.selectedLanguages?.join(", ")}
                     </p>
-                  )}
+    
+                    <p className="tags">
+                      {parti.selectedTags?.map((tag, i) => (
+                        <span key={i}>{tag}</span>
+                      ))}
+                    </p>
+    
+                    <p className="time-range">
+  {parti.timeRange
+    ? parti.timeRange.startDate === "Any"
+      ? "Any Time"
+      : `${parti.timeRange.startDate} ${parti.timeRange.startTime} - ${parti.timeRange.endDate} ${parti.timeRange.endTime}`
+    : "No time selected"}
+</p>
+
+    
+                    {parti.chatRoomName && (
+                      <p
+                        style={{
+                          marginTop: "10px",
+                          color: "#9ed6b9",
+                          fontSize: "14px",
+                        }}
+                      >
+                        Click to join chat room
+                      </p>
+                    )}
+                  </div>
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
+          </div>
         </div>
-      </div>
-    </div>
-  );
-}
+      );
+    }

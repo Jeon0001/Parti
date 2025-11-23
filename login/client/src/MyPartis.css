@@ -6,7 +6,7 @@
     background: linear-gradient(to bottom, #306844, #1E453E, #182C25);
     color: white;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    padding-top: 40px; /* space for topbar */
+    padding-top: 140px; /* space for topbar */
   }
   
   /* Topbar already exists from global CSS, reuse dashboard-topbar */
