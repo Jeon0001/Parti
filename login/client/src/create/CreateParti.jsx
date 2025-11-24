@@ -58,8 +58,8 @@ export default function CreateParti() {
       {/* Main Content */}
       <div className="create-content">
         <header className="step-hero">
-          <h1 className="create-title">
-            <span className="step-prefix">Step 1:</span> Choose your game
+          <h1 className="create-title-game">
+            <span className="step-prefix">Step 1:</span> Select your game
           </h1>
           <p className="sub-text">
             Browse curated hits and pick the title your Parti will rally behind.

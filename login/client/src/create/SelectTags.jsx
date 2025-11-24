@@ -52,7 +52,7 @@ export default function SelectTags() {
           <button onClick={() => navigate("/dashboard")}>Home</button>
           <button onClick={() => navigate("/mypartis")}>My Partis</button>
           <button onClick={() => navigate("/findpartis")}>Find Partis</button>
-          <button onClick={() => navigate("/create")}>Create Parti</button>
+          <button onClick={() => navigate("/createparti")}>Create Parti</button>
           <div className="account-bar">
             <button onClick={() => navigate("/login")}>Logout</button>
           </div>
@@ -62,7 +62,7 @@ export default function SelectTags() {
       {/* Main content */}
       <div className="select-tags-content">
         <header className="step-hero">
-          <h1 className="create-title">
+          <h1 className="create-title-tags">
             <span className="step-prefix">Step 3:</span> Choose your tags
           </h1>
           <p className="sub-text">

@@ -60,8 +60,8 @@
   margin-bottom: 12px;
 }
 
-.create-title {
-  font-size: clamp(2.5rem, 4vw, 3.4rem);
+.create-title-game {
+  font-size: 42px;
   margin: 0 0 12px;
 }
 
@@ -74,9 +74,9 @@
 .step-prefix {
   color: #92eabb;
   text-transform: uppercase;
-  letter-spacing: 0.25em;
-  font-size: 0.45em;
-  margin-right: 12px;
+  /* letter-spacing: 0.25em; */
+  /* font-size: 36px; */
+  /* margin-right: 12px; */
 }
   
   .game-search {

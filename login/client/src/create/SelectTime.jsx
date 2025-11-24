@@ -120,7 +120,7 @@ export default function SelectTime() {
           <button onClick={() => navigate("/dashboard")}>Home</button>
           <button onClick={() => navigate("/mypartis")}>My Partis</button>
           <button onClick={() => navigate("/findpartis")}>Find Partis</button>
-          <button onClick={() => navigate("/create")}>Create Parti</button>
+          <button onClick={() => navigate("/createparti")}>Create Parti</button>
           <div className="account-bar">
             <button onClick={() => navigate("/login")}>Logout</button>
           </div>
@@ -128,11 +128,20 @@ export default function SelectTime() {
       </nav>
 
       <main className="select-time-wrapper">
-        <header className="time-hero">
-          <p className="step-label">Step 4</p>
-          <h1 className="create-title">Choose date & time</h1>
+        {/* <header className="time-hero">
+          <p className="step-label-time">Step 4</p>
+          <h1 className="create-title-time">Choose date & time</h1>
           <p className="sub-text">
             Decide when gamers can hop in. Go with a polished custom window or keep it open to any time.
+          </p>
+        </header> */}
+
+        <header className="step-hero">
+          <h1 className="create-title-tags">
+            <span className="step-prefix">Step 4:</span> Choose date & time
+          </h1>
+          <p className="sub-text">
+          Decide when gamers can hop in. Go with a polished custom window or keep it open to any time.
           </p>
         </header>
 

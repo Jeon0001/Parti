@@ -55,7 +55,14 @@ export default function FindParti() {
 
       {/* Main Content */}
       <div className="create-content">
-        <h1 className="create-title">Step 1: Select your games</h1>
+      <header className="step-hero">
+          <h1 className="create-title-game">
+            <span className="step-prefix">Step 1:</span> Select your game
+          </h1>
+          <p className="sub-text">
+            Browse curated hits and pick the title your Parti will rally behind.
+          </p>
+        </header>
 
         <input
           type="text"

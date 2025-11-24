@@ -106,7 +106,7 @@ export default function AllPartis() {
     return (
         <div className="allpartis-page">
           {/* Topbar */}
-          <nav className="dashboard-topbar">
+          <nav className="dashboard-topbar" onClick={() => navigate("/dashboard")}>
             <div className="dashboard-logo">Parti</div>
             <div className="dashboard-buttons">
               <button onClick={() => navigate("/dashboard")}>Home</button>

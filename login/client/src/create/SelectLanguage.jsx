@@ -39,7 +39,7 @@ export default function SelectLanguage() {
           <button onClick={() => navigate("/dashboard")}>Home</button>
           <button onClick={() => navigate("/mypartis")}>My Partis</button>
           <button onClick={() => navigate("/findpartis")}>Find Partis</button>
-          <button onClick={() => navigate("/create")}>Create Parti</button>
+          <button onClick={() => navigate("/createparti")}>Create Parti</button>
           <button onClick={() => navigate("/socials")}>Socials</button>
 
           {/* <div className="account-bar">
@@ -52,7 +52,7 @@ export default function SelectLanguage() {
       {/* Main content */}
       <div className="language-content">
         <header className="step-hero">
-          <h1 className="create-title">
+          <h1 className="create-title-language">
             <span className="step-prefix">Step 2:</span> Choose your languages
           </h1>
           <p className="sub-text">

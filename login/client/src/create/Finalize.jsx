@@ -75,7 +75,7 @@ export default function Finalize() {
           <button onClick={() => navigate("/dashboard")}>Home</button>
           <button onClick={() => navigate("/mypartis")}>My Partis</button>
           <button onClick={() => navigate("/findpartis")}>Find Partis</button>
-          <button onClick={() => navigate("/create")}>Create Parti</button>
+          <button onClick={() => navigate("/createparti")}>Create Parti</button>
           <div className="account-bar">
             <button onClick={() => navigate("/login")}>Logout</button>
           </div>
