@@ -1,18 +1,14 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
 import "./MyPartis.css";
 
 export default function MyPartis() {
   const navigate = useNavigate();
+  const location = useLocation();
   const [partis, setPartis] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-  const [editingParti, setEditingParti] = useState(null);
-  const [editChatRoomName, setEditChatRoomName] = useState("");
-  const [editVisibleName, setEditVisibleName] = useState("");
-  const [editError, setEditError] = useState("");
-  const [editLoading, setEditLoading] = useState(false);
 
   useEffect(() => {
     const fetchPartis = async () => {
@@ -37,58 +33,22 @@ export default function MyPartis() {
     fetchPartis();
   }, []);
 
-  const handleEditClick = (parti, e) => {
-    e.stopPropagation(); // Prevent navigation when clicking edit
-    setEditingParti(parti.id);
-    setEditChatRoomName(parti.chatRoomName || "");
-    setEditVisibleName(parti.visibleName || "");
-    setEditError("");
-  };
+  useEffect(() => {
+    const updated = location.state?.updatedParti;
+    if (!updated) return;
 
-  const handleCancelEdit = () => {
-    setEditingParti(null);
-    setEditChatRoomName("");
-    setEditVisibleName("");
-    setEditError("");
-  };
+    setPartis((prev) => {
+      const exists = prev.some((p) => p.id === updated.id);
+      if (!exists) return prev;
+      return prev.map((p) => (p.id === updated.id ? updated : p));
+    });
 
-  const handleSaveEdit = async (partiId) => {
-    setEditLoading(true);
-    setEditError("");
+    navigate(location.pathname, { replace: true, state: null });
+  }, [location.state, location.pathname, navigate]);
 
-    try {
-      const res = await axios.put(
-        "http://localhost:3000/api/update-parti",
-        {
-          partiId,
-          chatRoomName: editChatRoomName.trim(),
-          visibleName: editVisibleName.trim() || null,
-        },
-        { withCredentials: true }
-      );
-
-      if (res.data.success) {
-        // Update the parti in the local state
-        setPartis((prevPartis) =>
-          prevPartis.map((p) =>
-            p.id === partiId ? res.data.parti : p
-          )
-        );
-        setEditingParti(null);
-        setEditChatRoomName("");
-        setEditVisibleName("");
-      } else {
-        setEditError(res.data.message || "Failed to update parti.");
-      }
-    } catch (err) {
-      console.error(err);
-      setEditError(
-        err.response?.data?.message ||
-          "Server error. Try again later."
-      );
-    } finally {
-      setEditLoading(false);
-    }
+  const goToManage = (parti, e) => {
+    e.stopPropagation();
+    navigate(`/mypartis/manage/${parti.id}`, { state: { parti } });
   };
 
   return (
@@ -115,147 +75,87 @@ export default function MyPartis() {
           <div className="no-partis">You haven't created any partis yet!</div>
         ) : (
           <div className="parti-grid">
-            {partis.map((parti, index) => (
-              <div 
-                className="parti-card" 
-                key={index}
+            {partis.map((parti) => (
+              <div
+                key={parti.id}
+                className={`parti-card ${parti.chatRoomName ? "clickable" : ""}`}
                 onClick={() => {
-                  if (parti.chatRoomName && editingParti !== parti.id) {
-                    navigate('/chat', { 
-                      state: { 
+                  if (parti.chatRoomName) {
+                    navigate("/chat", {
+                      state: {
                         chatRoomName: parti.chatRoomName,
-                        partiVisibleName: parti.visibleName || parti.selectedGame?.name || 'Parti Chat'
-                      } 
+                        partiVisibleName:
+                          parti.visibleName ||
+                          parti.selectedGame?.name ||
+                          "Parti Chat",
+                        partiId: parti.id,
+                      },
                     });
                   }
                 }}
-                style={{ cursor: parti.chatRoomName && editingParti !== parti.id ? 'pointer' : 'default' }}
+                style={{ cursor: parti.chatRoomName ? "pointer" : "default" }}
               >
                 {parti.selectedGame?.image && (
-                  <img src={parti.selectedGame.image} alt={parti.selectedGame.name} />
+                  <div className="parti-card-media">
+                    <img src={parti.selectedGame.image} alt={parti.selectedGame.name} />
+                    <span className="media-label">{parti.selectedGame.name}</span>
+                  </div>
                 )}
                 <div className="parti-card-content">
-                  {editingParti === parti.id ? (
-                    <div className="edit-form" onClick={(e) => e.stopPropagation()}>
-                      <h3>Edit Parti</h3>
-                      <div style={{ marginBottom: '15px' }}>
-                        <label style={{ display: 'block', marginBottom: '5px', fontSize: '14px', color: '#9ed6b9' }}>
-                          Chatroom ID:
-                        </label>
-                        <input
-                          type="text"
-                          value={editChatRoomName}
-                          onChange={(e) => setEditChatRoomName(e.target.value)}
-                          placeholder="Enter custom ID"
-                          style={{
-                            width: '100%',
-                            padding: '8px',
-                            borderRadius: '8px',
-                            border: '1px solid rgba(255, 255, 255, 0.2)',
-                            background: 'rgba(31, 55, 43, 0.5)',
-                            color: '#f0f7f3',
-                            fontSize: '14px'
-                          }}
-                        />
-                      </div>
-                      <div style={{ marginBottom: '15px' }}>
-                        <label style={{ display: 'block', marginBottom: '5px', fontSize: '14px', color: '#9ed6b9' }}>
-                          Visible Name (optional):
-                        </label>
-                        <input
-                          type="text"
-                          value={editVisibleName}
-                          onChange={(e) => setEditVisibleName(e.target.value)}
-                          placeholder="Leave empty to use game name"
-                          style={{
-                            width: '100%',
-                            padding: '8px',
-                            borderRadius: '8px',
-                            border: '1px solid rgba(255, 255, 255, 0.2)',
-                            background: 'rgba(31, 55, 43, 0.5)',
-                            color: '#f0f7f3',
-                            fontSize: '14px'
-                          }}
-                        />
-                      </div>
-                      {editError && (
-                        <p style={{ color: '#ff6b6b', fontSize: '12px', marginBottom: '10px' }}>
-                          {editError}
-                        </p>
-                      )}
-                      <div style={{ display: 'flex', gap: '10px' }}>
-                        <button
-                          onClick={() => handleSaveEdit(parti.id)}
-                          disabled={editLoading || !editChatRoomName.trim()}
-                          style={{
-                            padding: '8px 16px',
-                            background: editLoading || !editChatRoomName.trim() ? 'rgba(255, 255, 255, 0.3)' : '#ffffff',
-                            color: editLoading || !editChatRoomName.trim() ? 'rgba(0, 0, 0, 0.5)' : '#0d1f19',
-                            border: 'none',
-                            borderRadius: '999px',
-                            cursor: editLoading || !editChatRoomName.trim() ? 'not-allowed' : 'pointer',
-                            fontSize: '14px',
-                            fontWeight: '600'
-                          }}
-                        >
-                          {editLoading ? 'Saving...' : 'Save'}
-                        </button>
-                        <button
-                          onClick={handleCancelEdit}
-                          disabled={editLoading}
-                          style={{
-                            padding: '8px 16px',
-                            background: 'transparent',
-                            color: '#ffffff',
-                            border: '1px solid rgba(255, 255, 255, 0.4)',
-                            borderRadius: '999px',
-                            cursor: editLoading ? 'not-allowed' : 'pointer',
-                            fontSize: '14px'
-                          }}
-                        >
-                          Cancel
-                        </button>
-                      </div>
+                  <div className="card-top">
+                    <div>
+                      <p className="card-label">Chatroom</p>
+                      <h3>{parti.visibleName || parti.selectedGame?.name}</h3>
                     </div>
-                  ) : (
-                    <>
-                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
-                        <h3>{parti.visibleName || parti.selectedGame?.name}</h3>
-                        <button
-                          onClick={(e) => handleEditClick(parti, e)}
-                          style={{
-                            background: 'transparent',
-                            border: '1px solid rgba(255, 255, 255, 0.3)',
-                            color: '#9ed6b9',
-                            padding: '4px 12px',
-                            borderRadius: '6px',
-                            cursor: 'pointer',
-                            fontSize: '12px'
-                          }}
-                        >
-                          Edit
-                        </button>
-                      </div>
-                      <p><strong>Host:</strong> {parti.hostUsername}</p>
-                      <p><strong>Chatroom ID:</strong> {parti.chatRoomName}</p>
-                      <p><strong>Languages:</strong> {parti.selectedLanguages.join(", ")}</p>
-                      <p className="tags">
-                        {parti.selectedTags.map((tag, i) => (
-                          <span key={i}>{tag}</span>
-                        ))}
-                      </p>
-                  <p className="time-range">
-                    {parti.timeRange?.startDate === "Any" 
-                      ? "Any Time" 
-                      : `${parti.timeRange.startDate} ${parti.timeRange.startTime} - ${parti.timeRange.endDate} ${parti.timeRange.endTime}`}
-                  </p>
-                      {parti.chatRoomName && (
-                        <p style={{ marginTop: '10px', color: '#9ed6b9', fontSize: '14px' }}>
-                          Click to join chat room
-                        </p>
+                  </div>
+
+                  <div className="card-meta">
+                    <div className="meta-block">
+                      <span className="meta-label">Host</span>
+                      <strong>{parti.hostUsername}</strong>
+                    </div>
+                    <div className="meta-block">
+                      <span className="meta-label">Languages</span>
+                      <strong>{(parti.selectedLanguages || []).slice(0, 2).join(", ") || "N/A"}</strong>
+                      {parti.selectedLanguages?.length > 2 && (
+                        <small>+{parti.selectedLanguages.length - 2} more</small>
                       )}
-                    </>
-                  )}
+                    </div>
+                  </div>
+
+                  <div className="tag-list">
+                    {(parti.selectedTags || []).slice(0, 4).map((tag, index) => (
+                      <span key={`${tag}-${index}`} className="tag-pill">{tag}</span>
+                    ))}
+                    {parti.selectedTags?.length > 4 && (
+                      <span className="tag-pill muted">+{parti.selectedTags.length - 4}</span>
+                    )}
+                  </div>
+
+                  <div className="card-footer">
+                    <div>
+                      <span className="meta-label">Chatroom ID</span>
+                      <p className="meta-value">{parti.chatRoomName || "Not set"}</p>
+                    </div>
+                    <div>
+                      <span className="meta-label">Time</span>
+                      <p className="meta-value">
+                        {parti.timeRange?.startDate === "Any"
+                          ? "Any Time"
+                          : `${parti.timeRange?.startDate} ${parti.timeRange?.startTime} - ${parti.timeRange?.endDate} ${parti.timeRange?.endTime}`}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="card-actions">
+                    <button
+                      className="manage-btn"
+                      onClick={(e) => goToManage(parti, e)}
+                    >
+                      Manage Parti
+                    </button>
+                  </div>
+
                 </div>
               </div>
             ))}

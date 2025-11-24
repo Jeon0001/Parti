@@ -117,6 +117,61 @@
   margin: 0 auto;
 }
 
+.chat-manage-banner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  padding: 16px 24px;
+  margin-bottom: 24px;
+  background: rgba(3, 19, 13, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 18px;
+  backdrop-filter: blur(10px);
+}
+
+.chat-manage-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.banner-label {
+  text-transform: uppercase;
+  letter-spacing: 0.3em;
+  font-size: 11px;
+  color: #9ed6b9;
+  margin: 0;
+}
+
+.banner-title {
+  margin: 0;
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.banner-meta {
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.manage-parti-link {
+  border: none;
+  background: linear-gradient(120deg, #6df0b2, #4fc08d);
+  color: #052217;
+  font-weight: 700;
+  padding: 12px 28px;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  white-space: nowrap;
+}
+
+.manage-parti-link:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 25px rgba(77, 206, 152, 0.35);
+}
+
 .call-info {
   background: radial-gradient(circle at top left, #1c3d30, #0f281f 70%);
   padding: 20px 24px;

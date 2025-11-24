@@ -307,7 +307,7 @@ app.put("/api/update-parti", (req, res) => {
   if (!req.session.user)
     return res.status(401).json({ success: false, message: "Not logged in" });
 
-  const { partiId, chatRoomName, visibleName } = req.body;
+  const { partiId, chatRoomName, visibleName, selectedLanguages, selectedTags } = req.body;
   const username = req.session.user.username;
 
   // Find the parti
@@ -340,6 +340,33 @@ app.put("/api/update-parti", (req, res) => {
   // Update visible name if provided
   if (visibleName !== undefined) {
     parti.visibleName = visibleName || null; // Allow empty string to reset to null
+  }
+
+  if (selectedLanguages !== undefined) {
+    if (!Array.isArray(selectedLanguages)) {
+      return res.status(400).json({
+        success: false,
+        message: "selectedLanguages must be an array"
+      });
+    }
+    parti.selectedLanguages = selectedLanguages;
+  }
+
+  if (selectedTags !== undefined) {
+    if (!Array.isArray(selectedTags)) {
+      return res.status(400).json({
+        success: false,
+        message: "selectedTags must be an array"
+      });
+    }
+    parti.selectedTags = selectedTags;
+  }
+
+  // Keep the per-user cache in sync
+  if (userPartis[username]) {
+    userPartis[username] = userPartis[username].map((p) =>
+      p.id === partiId ? { ...p, ...parti } : p
+    );
   }
 
   res.json({ success: true, message: "Parti updated successfully", parti });

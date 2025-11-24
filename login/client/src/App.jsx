@@ -15,6 +15,7 @@ import CreateSelectTime from "./create/SelectTime"
 import CreateFinalize from "./create/Finalize"
 import Chat from "./chat/Chat"
 import AllPartis from "./find/AllPartis";
+import ManageParti from "./ManageParti";
 
 
 
@@ -38,6 +39,7 @@ export default function App() {
         <Route path="/find/selecttime" element={<FindSelectTime />} />
         <Route path="/allpartis" element={<AllPartis />} />
         <Route path="/mypartis" element={<MyPartis />} />
+        <Route path="/mypartis/manage/:partiId" element={<ManageParti />} />
         <Route path="/chat" element={<Chat />} />
       </Routes>
     </BrowserRouter>

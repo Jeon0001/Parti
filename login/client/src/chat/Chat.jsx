@@ -23,6 +23,7 @@ export default function Chat() {
   const [autoJoining, setAutoJoining] = useState(false);
   const [partiVisibleName, setPartiVisibleName] = useState(null);
   const [hasManuallyLeft, setHasManuallyLeft] = useState(false);
+  const partiId = location.state?.partiId;
 
   const localStreamRef = useRef(null);
   const remoteStreamRef = useRef(null);
@@ -388,6 +389,14 @@ export default function Chat() {
     }
   };
 
+  const handleOpenManageParti = () => {
+    if (!partiId) return;
+    if (inCall) {
+      leaveCall();
+    }
+    navigate(`/mypartis/manage/${partiId}`);
+  };
+
   const sendMessage = (e) => {
     e.preventDefault();
     if (!messageInput.trim()) return;
@@ -417,6 +426,21 @@ export default function Chat() {
           Back to Dashboard
         </button>
       </div>
+
+      {partiId && (
+        <div className="chat-manage-banner">
+          <div className="chat-manage-copy">
+            <p className="banner-label">Linked Parti</p>
+            <p className="banner-title">{partiVisibleName || 'Untitled Parti'}</p>
+            {location.state?.chatRoomName && (
+              <span className="banner-meta">Chatroom ID: {location.state.chatRoomName}</span>
+            )}
+          </div>
+          <button className="manage-parti-link" onClick={handleOpenManageParti}>
+            Manage Parti
+          </button>
+        </div>
+      )}
 
       {!inCall ? (
         <div className="call-setup">

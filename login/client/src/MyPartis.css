@@ -16,52 +16,88 @@
     max-width: 1200px;
     width: 100%;
     margin: 0 auto 40px auto;
-    /* padding: 20px; */
+    padding: 0 20px;
   }
   
   /* Grid layout: up to 4 cards per row, responsive */
   .parti-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(250px, 250px)); /* fixed card width */
-    justify-content: center; /* center the cards if fewer than 4 */
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
     gap: 24px;
+    justify-items: stretch;
+    align-items: stretch;
   }
   
   
   /* Each card */
   .parti-card {
-    background: rgba(0, 0, 0, 0.7);
-    border-radius: 12px;
+    background: linear-gradient(180deg, rgba(5, 22, 17, 0.95), rgba(7, 30, 22, 0.95));
+    border-radius: 16px;
     overflow: hidden;
-    text-align: center;
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(111, 225, 189, 0.25);
+    box-shadow: 0 18px 35px rgba(0, 0, 0, 0.5);
     transition: transform 0.2s ease, box-shadow 0.2s ease;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: 520px;
+    min-height: 320px;
+    margin: 0 auto;
+    position: relative;
   }
   
   .parti-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.7);
-    cursor: pointer;
+    transform: translateY(-6px);
+    box-shadow: 0 30px 70px rgba(0, 0, 0, 0.65);
+  }
+
+  .parti-card::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    pointer-events: none;
+  }
+
+  .parti-card-media {
+    position: relative;
+    overflow: hidden;
   }
   
   /* Game image on card */
   .parti-card img {
     width: 100%;
-    aspect-ratio: 1 / 1;
+    height: 120px;
     object-fit: cover;
-    /* border-bottom: 1px solid rgba(255, 255, 255, 0.2); */
-    border-radius: 12px;
+  }
+
+  .media-label {
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+    padding: 4px 10px;
+    background: rgba(0, 0, 0, 0.65);
+    border-radius: 999px;
+    font-size: 0.8rem;
+    letter-spacing: 0.04em;
   }
   
   /* Card content */
   .parti-card-content {
-    padding: 16px;
+    padding: 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    align-items: center;
+    text-align: center;
+    flex: 1;
   }
   
   .parti-card-content h3 {
-    font-size: 22px;
+    font-size: 1.5rem;
     font-weight: 700;
-    margin-bottom: 8px;
+    margin: 0;
   }
   
   .parti-card-content p {
@@ -77,7 +113,7 @@
     color: #a0a0a0;
   }
   
-  .tags span {
+.tags span {
     background: #306844;
     color: white;
     padding: 2px 8px;
@@ -86,7 +122,116 @@
     display: inline-block;
     font-size: 12px;
   }
-  
+
+  .card-top {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .card-label {
+    text-transform: uppercase;
+    letter-spacing: 0.35em;
+    font-size: 0.75rem;
+    color: rgba(255, 255, 255, 0.55);
+    margin-bottom: 4px;
+  }
+
+  .card-meta {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 12px;
+    padding: 12px;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.04);
+    width: 100%;
+  }
+
+  .card-meta .meta-block {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    align-items: center;
+    text-align: center;
+  }
+
+  .card-actions {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+  }
+
+  .manage-btn {
+    border: none;
+    background: linear-gradient(120deg, #6df0b2, #4fc08d);
+    color: #042016;
+    font-weight: 700;
+    padding: 10px 22px;
+    border-radius: 999px;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    min-width: 170px;
+    letter-spacing: 0.04em;
+  }
+
+  .manage-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 25px rgba(77, 206, 152, 0.35);
+  }
+
+  .meta-label {
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    font-size: 0.7rem;
+    color: rgba(255, 255, 255, 0.6);
+  }
+
+  .meta-block strong {
+    font-size: 1rem;
+  }
+
+  .tag-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+  }
+
+  .tag-pill {
+    padding: 6px 12px;
+    border-radius: 999px;
+    font-size: 0.85rem;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    background: rgba(255, 255, 255, 0.04);
+  }
+
+  .tag-pill.muted {
+    color: rgba(255, 255, 255, 0.6);
+  }
+
+  .card-footer {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 16px;
+    width: 100%;
+  }
+
+  .card-footer > div {
+    flex: 1;
+    min-width: 140px;
+    text-align: center;
+  }
+
+  .meta-value {
+    font-size: 0.95rem;
+    color: #e0f6ea;
+  }
+
   /* No partis message */
   .no-partis {
     text-align: center;
