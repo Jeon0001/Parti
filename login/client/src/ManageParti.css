@@ -254,15 +254,15 @@
   gap: 10px;
 }
 
-.language-card,
-.tags-card {
+.manage-card.language-card,
+.manage-card.tags-card {
   min-height: 420px;
   height: 100%;
   overflow: hidden;
 }
 
-.language-card .language-list,
-.tags-card .tags-grid-manage {
+.manage-card.language-card .language-list,
+.manage-card.tags-card .tags-grid-manage {
   max-height: none;
 }
 
