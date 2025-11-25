@@ -1,4 +1,5 @@
 .manage-parti-page {
+  padding-top: 100px;
   min-height: 100vh;
   background: radial-gradient(circle at top, #09261a 0%, #030f0b 45%, #020604 100%);
   color: #f0f7f3;
@@ -585,10 +586,11 @@
   gap: 12px;
   margin-top: 32px;
   padding: 16px 24px;
-  background: rgba(8, 20, 15, 0.85);
+  background: rgba(7, 33, 24, 0.6);
+  z-index: 1000;
   border: 1px solid rgba(255, 255, 255, 0.05);
   border-radius: 16px;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);
 }
 
 @media (max-width: 960px) {

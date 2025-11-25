@@ -113,8 +113,8 @@ export default function Finalize() {
                 <p className="eyebrow">Game</p>
                 <h2>{selectedGame?.name || "Not selected"}</h2>
                 <div className="hero-stats">
-                  <span>{languagesList.length} languages</span>
-                  <span>{tagsList.length} tags</span>
+                  <span>{languagesList.length} language(s)</span>
+                  <span>{tagsList.length} tag(s)</span>
                 </div>
               </div>
             </div>

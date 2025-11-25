@@ -206,6 +206,7 @@ export default function AllPartis() {
                 </div>
               ))}
             </div>
+            
           </div>
         </div>
       );

@@ -13,6 +13,7 @@ body {
 }
 
 .dashboard-page {
+  overflow: hidden;
   min-height: 100vh;
   background: linear-gradient(180deg, #0c231d 0%, #0f3027 45%, #14281f 100%);
 }
