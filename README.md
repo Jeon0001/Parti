@@ -47,7 +47,7 @@ npm install
 cd ..
 ```
 
-### 3. Environment Configuration
+### 3. Environment Configuration (Optional)
 
 Create a `.env` file in the `login` directory with the following variables:
 
